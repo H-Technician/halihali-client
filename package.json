@@ -1,0 +1,37 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build --dotenv .env.production",
+    "dev": "nuxt dev --dotenv .env.development --host",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.5.1",
+    "@types/crypto-js": "^4.2.2",
+    "@vuepic/vue-datepicker": "^9.0.3",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
+    "crypto-js": "^4.2.0",
+    "dashjs": "^4.7.4",
+    "date-fns": "^4.1.0",
+    "js-cookie": "^3.0.5",
+    "nuxt": "^3.11.2",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
+    "spark-md5": "^3.0.2",
+    "vite": "^5.4.8",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/spark-md5": "^3.0.4",
+    "sass": "^1.76.0",
+    "vite-plugin-svg-icons": "^2.0.1"
+  }
+}
