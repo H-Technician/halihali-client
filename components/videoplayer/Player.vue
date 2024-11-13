@@ -1206,12 +1206,12 @@ defineExpose({
         -ms-user-select: none;
         user-select: none;
         z-index: 65;
-        // opacity: 0;
+        opacity: 0;
         color: #fff;
         padding: 0 8px 0 12px;
         -webkit-transition: opacity .3s;
         transition: opacity .3s;
-        // visibility: hidden;
+        visibility: hidden;
 
         .player-toast-close {
           fill: #fff;
