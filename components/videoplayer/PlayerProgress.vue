@@ -220,7 +220,7 @@ onUnmounted(() => {
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
-            height: 2px;
+            height: 3px;
             position: relative;
             width: 100%;
             transition: all .2s linear;
@@ -232,7 +232,7 @@ onUnmounted(() => {
 
                 .player-progress-schedule-dot {
                     position: absolute;
-                    bottom: -7.5px;
+                    bottom: -6.5px;
                     width: 20px;
                     height: 20px;
 
@@ -325,7 +325,7 @@ onUnmounted(() => {
         }
 
         .state-active {
-            height: 4px;
+            height: 6px;
         }
     }
 }

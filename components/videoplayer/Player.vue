@@ -12,9 +12,10 @@
             @dblclick="dblclickFullscreen">
             <div class="player-video-wrap" :class="isMirror ? 'state-mirror' : ''"
               :style="videoRatio === '4:3' ? 'width: 75.0499%; height: 100%;' : ''">
-              <video ref="videoPlayer" crossorigin="anonymous" preload="auto" :style="videoRatio === '4:3' ? 'object-fit: fill;' : ''"
-                :autoplay="!props.isUpload" @loadedmetadata="onLoadedMetadata" @timeupdate="onTimeUpdate"
-                @progress="onProgress" @ended="onVideoEnded" @waiting="onWaiting" @playing="onPlaying">
+              <video ref="videoPlayer" crossorigin="anonymous" preload="auto"
+                :style="videoRatio === '4:3' ? 'object-fit: fill;' : ''" :autoplay="!props.isUpload"
+                @loadedmetadata="onLoadedMetadata" @timeupdate="onTimeUpdate" @progress="onProgress"
+                @ended="onVideoEnded" @waiting="onWaiting" @playing="onPlaying">
               </video>
             </div>
           </div>
@@ -23,9 +24,10 @@
           @dblclick="dblclickFullscreen">
           <div class="player-video-wrap" :class="isMirror ? 'state-mirror' : ''"
             :style="videoRatio === '4:3' ? 'width: 75.0499%; height: 100%;' : ''">
-            <video ref="videoPlayer" crossorigin="anonymous" preload="auto" :style="videoRatio === '4:3' ? 'object-fit: fill;' : ''"
-              :autoplay="!props.isUpload" @loadedmetadata="onLoadedMetadata" @timeupdate="onTimeUpdate"
-              @progress="onProgress" @ended="onVideoEnded" @waiting="onWaiting" @playing="onPlaying">
+            <video ref="videoPlayer" crossorigin="anonymous" preload="auto"
+              :style="videoRatio === '4:3' ? 'object-fit: fill;' : ''" :autoplay="!props.isUpload"
+              @loadedmetadata="onLoadedMetadata" @timeupdate="onTimeUpdate" @progress="onProgress" @ended="onVideoEnded"
+              @waiting="onWaiting" @playing="onPlaying">
             </video>
           </div>
         </div>
@@ -39,7 +41,7 @@
         <div class="player-top-wrap" v-show="!props.isUpload" :style="controlsShowVisibility ?
           'visibility: visible;' :
           'visibility: hidden;'" :class="controlsVisibility ?
-              'show' : 'hide'">
+            'show' : 'hide'">
           <div class="player-top-left">
             <div class="player-top-left-title" :style="isFullscreen || isWebFullScreen ?
               '' : 'display: none;'">
@@ -76,10 +78,11 @@
           :class="controlsVisibility ? 'show' : 'hide'" :fullscreen="isFullscreen" :currentTime="currentProgress"
           :duration="videoDuration" :playing="isPlaying" :volume="volume" :isMuted="isMuted"
           :inPictureInPicture="isInPictureInPicture" :buffer="buffer" :webFullScreen="isWebFullScreen"
-          :displayDanmu="displayDanmu" :isUpload="props.isUpload" :isWideScreen="isWideScreen" @changDisplayDanmu="changDisplayDanmu"
-          @toggleFullscreen="toggleFullscreen" @togglePlayPause="togglePlayPause" @changeCurrent="changeCurrent"
-          @mousemove="showControls('controls')" @updateVolume="updateVolume" @toggleMute="toggleMute"
-          @togglePiP="togglePiP" @changeBackrate="changeBackrate" @toggleWebFullscreen="toggleWebFullscreen" @toggleWideScreen="toggleWideScreen" />
+          :displayDanmu="displayDanmu" :isUpload="props.isUpload" :isWideScreen="isWideScreen"
+          @changDisplayDanmu="changDisplayDanmu" @toggleFullscreen="toggleFullscreen" @togglePlayPause="togglePlayPause"
+          @changeCurrent="changeCurrent" @mousemove="showControls('controls')" @updateVolume="updateVolume"
+          @toggleMute="toggleMute" @togglePiP="togglePiP" @changeBackrate="changeBackrate"
+          @toggleWebFullscreen="toggleWebFullscreen" @toggleWideScreen="toggleWideScreen" />
         <!-- MINI播放器容器 -->
         <div class="player-mini-warp" id="player-mini-warp" :class="isShowMinPlayer ? 'show-min-player' : ''"
           :style="`right: ${minPlayerRight}px; bottom: ${minPlayerBottom}px;`" ref="minPlayerRef">
@@ -110,6 +113,14 @@
           <span class="player-volume-hint-text">
             {{ volume === 0 || isMuted ? '静音' : (volume * 100).toFixed(0) + '%' }}
           </span>
+        </div>
+        <div class="player-toast-wrap">
+          <div class="player-toast-close">
+            <i class="iconfont icon-close"></i>
+          </div>
+          <span class="player-toast-text">记忆你上次看到</span>
+          <span class="player-toast-time">07:06</span>
+          <span class="player-toast-jump">跳转</span>
         </div>
       </div>
       <!-- 底部弹幕发送栏 -->
@@ -161,9 +172,9 @@ const videoRatio = ref('auto'); // 视频比例 auto 4:3 16:9
 const playerConfig = ref<PlayerProfile>(); // 播放器本地个性化信息
 const testAvatar = ref('https://static.v.hblog.top/images/avatar/706353e46fe1c390d6d2cb72a704818a/706353e46fe1c390d6d2cb72a704818a.webp');
 const emit = defineEmits([
-  'changWebFullScreen', 
-  'videoDuration', 
-  'videocurRentTime', 
+  'changWebFullScreen',
+  'videoDuration',
+  'videocurRentTime',
   'updateCard',
   'toggleWideScreen']);
 const isLoaded = ref(false); // dom是否挂载
@@ -639,22 +650,22 @@ const initDash = async (videoUrl: string) => {
 };
 // 监听元素是否进入可视区域
 // if (process.client) {
-  observer.value = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (props.isUpload) return;
-      if (entry.isIntersecting) {
-        // 元素进入可视区域
-        isShowMinPlayer.value = false;
-      } else {
-        // 元素离开可视区域
-        if (!isInPictureInPicture.value) {
-          isShowMinPlayer.value = true;
-          if (!minPlayerRef.value) return;
-          minPlayerRef.value.onmousedown = fnDown
-        }
+observer.value = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (props.isUpload) return;
+    if (entry.isIntersecting) {
+      // 元素进入可视区域
+      isShowMinPlayer.value = false;
+    } else {
+      // 元素离开可视区域
+      if (!isInPictureInPicture.value) {
+        isShowMinPlayer.value = true;
+        if (!minPlayerRef.value) return;
+        minPlayerRef.value.onmousedown = fnDown
       }
-    });
-  }, { threshold: 0.5 });
+    }
+  });
+}, { threshold: 0.5 });
 // }
 // 初始化视频播放器
 const initPlayer = async (videoUrl: string) => {
@@ -1181,6 +1192,52 @@ defineExpose({
         animation: hl-fade-out .3s forwards;
       }
 
+      .player-toast-wrap {
+        background-color: rgba(0, 0, 0, .8);
+        border-radius: 4px;
+        bottom: 68px;
+        font-size: 14px;
+        left: 10px;
+        line-height: 36px;
+        pointer-events: none;
+        position: absolute;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        z-index: 65;
+        // opacity: 0;
+        color: #fff;
+        padding: 0 8px 0 12px;
+        -webkit-transition: opacity .3s;
+        transition: opacity .3s;
+        // visibility: hidden;
+
+        .player-toast-close {
+          fill: #fff;
+          float: left;
+          height: 100%;
+          margin-right: 4px;
+          position: relative;
+          top: 1px;
+          width: auto;
+
+          i {
+            line-height: 36px;
+            pointer-events: all;
+            cursor: pointer;
+          }
+        }
+
+        .player-toast-jump {
+          color: var(--brand_pink);
+          margin: 0 6px 0 6px;
+          text-decoration: none;
+          cursor: pointer;
+          pointer-events: all;
+        }
+      }
+
     }
 
     .player-video-area * {
@@ -1436,6 +1493,10 @@ defineExpose({
 
   .player-volume-hint-show {
     opacity: 1;
+  }
+
+  .player-toast-wrap {
+    bottom: 94px !important;
   }
 }
 
