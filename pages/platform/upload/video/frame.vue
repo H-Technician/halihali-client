@@ -1526,6 +1526,7 @@ onUnmounted(() => {
                                 max-width: 218px;
                                 position: relative;
                                 width: 218px;
+                                box-sizing: content-box;
 
                                 .task {
                                     height: 40px;
@@ -1540,6 +1541,7 @@ onUnmounted(() => {
                                     color: #18191c;
                                     margin-right: 10px;
                                     margin-bottom: 10px;
+                                    box-sizing: content-box;
 
                                     .task-title {
                                         overflow: hidden;

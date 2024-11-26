@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: undefined,
   valueModifiers: () => ({}),
   placeholder: '',
-})
+});
 const inputWidth = computed(() => {
   if (typeof props.width === 'number') {
     return props.width + 'px'

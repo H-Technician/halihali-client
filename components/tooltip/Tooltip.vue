@@ -21,6 +21,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { CSSProperties } from 'vue'
+import { rafTimeout, cancelRaf } from '@/utils/rafTimeout';
 interface Props {
   maxWidth?: number // 提示框内容最大宽度，单位px
   content?: string // 展示的文本 string | slot
@@ -56,15 +57,15 @@ function getPosition() {
 }
 function onShow() {
   getPosition()
-  clearTimeout(hideTimer.value)
-  showTimer.value = setTimeout(() => {
+  cancelRaf(hideTimer.value)
+  showTimer.value = rafTimeout(() => {
     visible.value = true
     emit('openChange', visible.value)
   }, 200)
 }
 function onHide(): void {
-  clearTimeout(showTimer.value)
-  hideTimer.value = setTimeout(() => {
+  cancelRaf(showTimer.value)
+  hideTimer.value = rafTimeout(() => {
     visible.value = false
     emit('openChange', visible.value)
   }, 100)

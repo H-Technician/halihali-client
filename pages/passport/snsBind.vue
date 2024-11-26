@@ -1,6 +1,6 @@
 <template>
     <Title>账号绑定</Title>
-    <div class="sns-bind_warp"> 
+    <div class="sns-bind_warp">
         <HeaderBar :isFixedHeader="true" />
         <div class="sns-bind-top-warp">
             <div class="sns-bind-top-area">
@@ -9,126 +9,140 @@
         </div>
         <div class="sns-bind-area">
             <div class="sns-bind-login">
-                    <div class="sns-card">
-                        <div class="sns-left">
-                            <div class="sns_thrid_content">
-                                <div class="sns_thrid_blok" v-if="snsBinType === 'qq'">
-                                    <div class="sns_thrid_item sns_thrid_qq"></div>
-                                    <div class="sns_thrid_name">QQ</div>
+                <div class="sns-card">
+                    <div class="sns-left">
+                        <div class="sns_thrid_content">
+                            <div class="sns_thrid_blok" v-if="snsBindType === 'qq'">
+                                <div class="sns_thrid_item sns_thrid_qq"></div>
+                                <div class="sns_thrid_name">QQ</div>
+                            </div>
+                            <div class="sns_thrid_blok" v-if="snsBindType === 'weibo'">
+                                <div class="sns_thrid_item sns_thrid_weibo"></div>
+                                <div class="sns_thrid_name">微博</div>
+                            </div>
+                            <div class="sns_thrid_blok" v-if="snsBindType === 'alipay'">
+                                <div class="sns_thrid_item sns_thrid_alipay"></div>
+                                <div class="sns_thrid_name">支付宝</div>
+                            </div>
+                            <div class="sns_thrid_arrow"></div>
+                            <div class="sns_thrid_blok">
+                                <div class="sns_hl_logo"></div>
+                                <div class="sns_thrid_name">哈哩哈哩</div>
+                            </div>
+                        </div>
+                        <div class="sns_thrid_info">已有哈哩哈哩账号？输入账号信息登录立即绑定</div>
+
+                    </div>
+                    <div class="Vertical-line">
+                    </div>
+                    <div class="sns-register-container">
+                        <div class="sns-register_header">
+                            <div class="navs">
+                                <div class="navs-item" @click="switchLoginCard($event, 'password')"
+                                    :class="isCardActive === 'password' ? 'active' : ''">
+                                    密码登录
                                 </div>
-                                <div class="sns_thrid_blok" v-if="snsBinType === 'weibo'">
-                                    <div class="sns_thrid_item sns_thrid_weibo"></div>
-                                    <div class="sns_thrid_name">微博</div>
+                                <div class="navs-item" @click="switchLoginCard($event, 'verificationCode')"
+                                    :class="isCardActive === 'verificationCode' ? 'active' : ''">
+                                    验证码登录
                                 </div>
-                                <div class="sns_thrid_blok" v-if="snsBinType === 'alipay'">
-                                    <div class="sns_thrid_item sns_thrid_alipay"></div>
-                                    <div class="sns_thrid_name">支付宝</div>
-                                </div>
-                                <div class="sns_thrid_arrow"></div>
-                                <div class="sns_thrid_blok">
-                                    <div class="sns_hl_logo"></div>
-                                    <div class="sns_thrid_name">哈哩哈哩</div>
+                                <div class="navs-item" @click="switchLoginCard($event, 'scan')"
+                                    :class="isCardActive === 'scan' ? 'active' : ''">
+                                    扫码登录
                                 </div>
                             </div>
-                            <div class="sns_thrid_info">已有哈哩哈哩账号？输入账号信息登录立即绑定</div>
-    
                         </div>
-                        <div class="Vertical-line">
-                        </div>
-                        <div class="sns-register-container">
-                            <div class="sns-register_header">
-                                <div class="navs">
-                                    <div class="navs-item" @click="switchLoginCard('password')" :class="isCardActive === 'password' ? 'active' : ''">
-                                        密码登录
-                                    </div>
-                                    <div class="navs-item" @click="switchLoginCard('verificationCode')" :class="isCardActive === 'verificationCode' ? 'active' : ''">
-                                        验证码登录
-                                    </div>
-                                    <div class="navs-item" @click="switchLoginCard('scan')" :class="isCardActive === 'scan' ? 'active' : ''">
-                                        扫码登录
-                                    </div>
+                        <div class="login-register_content">
+                            <form class="login-box" v-show="isCardActive === 'password'">
+                                <div class="input-box input-box-top">
+                                    <span>账号</span>
+                                    <input type="text" placeholder="请输入账号" v-model="usernameLogin" maxlength="32">
                                 </div>
-                            </div>
-                            <div class="login-register_content">
-                                <div class="login-box" v-if="isCardActive === 'password'">
-                                    <form class="input-box input-box-top">
-                                        <span>账号</span>
-                                        <input type="text" placeholder="请输入账号" v-model="usernameLogin" maxlength="32">
-                                    </form>
-                                    <form class="input-box input-box-bottom">
-                                        <span>密码</span>
-                                        <input 
-                                        :type="isxianshimima 
-                                        ? 'text' 
-                                        : 'password'" 
-                                        placeholder="请输入密码" 
-                                        v-model="passwordLogin" 
-                                        maxlength="32"
+                                <div class="input-box input-box-bottom">
+                                    <span>密码</span>
+                                    <input :type="isxianshimima
+                                        ? 'text'
+                                        : 'password'" placeholder="请输入密码" v-model="passwordLogin" maxlength="32"
                                         autocomplete="off">
-                                        <IconsLoginreistetZhengYan class="xianshimima" v-if="isxianshimima" @click="YincangMima"/>
-                                        <IconsLoginreistetBiYan class="yincangmima" v-else @click="XianshiMima"/>
-                                        <Popover popStyle="padding-top: 14px;" placement="bottom" trigger="click">
-                                            <template #reference>
-                                                <button class="wjma" @click="(event) => {event.preventDefault();}">忘记密码？</button>
-                                            </template>
-                                            <template #content>
-                                                <div class="wjma-box" style="width: 300px;">
-                                                    <div @click="switchLoginCard('verificationCode')">
-                                                        <div class="wjma-text">
-                                                            <span>发送验证码快捷登录</span>
-                                                        </div>
-                                                        <div class="wjma-text text-tips">
-                                                            <span>未注册或绑定哈哩哈哩的手机号或邮箱，将帮你注册新账号</span>
-                                                        </div> 
+                                    <IconsLoginreistetZhengYan class="xianshimima" v-if="isxianshimima"
+                                        @click="YincangMima" />
+                                    <IconsLoginreistetBiYan class="yincangmima" v-else @click="XianshiMima" />
+                                    <Popover popStyle="padding-top: 14px;" placement="bottom" trigger="click">
+                                        <template #reference>
+                                            <button class="wjma"
+                                                @click="(event) => { event.preventDefault(); }">忘记密码？</button>
+                                        </template>
+                                        <template #content>
+                                            <div class="wjma-box" style="width: 300px;">
+                                                <div @click="switchLoginCard($event, 'verificationCode')">
+                                                    <div class="wjma-text">
+                                                        <span>发送验证码快捷登录</span>
                                                     </div>
-                                                    <div style="margin-top: 10px;">
-                                                        <div class="wjma-text">
-                                                            <span>去找回密码</span>
-                                                        </div>
-                                                        <div class="wjma-text text-tips">
-                                                            <span>发送验证码快捷登录</span>
-                                                        </div>
+                                                    <div class="wjma-text text-tips">
+                                                        <span>未注册或绑定哈哩哈哩的手机号或邮箱，将帮你注册新账号</span>
                                                     </div>
                                                 </div>
-                                            </template>
-                                        </Popover>
-                                    </form>
-                                    <div class="submit-box">
-                                        <button class="submit-register" @click="switchLoginCard('verificationCode')">没有账号？立即注册</button>
-                                        <button class="submit" @click="login" :class="agreement ? '' : 'disabled'">授权并登录</button>
+                                                <div style="margin-top: 10px;">
+                                                    <div class="wjma-text">
+                                                        <span>去找回密码</span>
+                                                    </div>
+                                                    <div class="wjma-text text-tips">
+                                                        <span>发送验证码快捷登录</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </Popover>
+                                </div>
+                                <div class="submit-box">
+                                    <button class="submit-register"
+                                        @click="switchLoginCard($event, 'verificationCode')">没有账号？立即注册</button>
+                                    <button class="submit" @click="login"
+                                        :class="agreement ? '' : 'disabled'">授权并登录</button>
+                                </div>
+                            </form>
+                            <form class="register-box" v-show="isCardActive === 'verificationCode'">
+                                <div class="input-box input-box-top">
+                                    <!-- <span>手机号</span> -->
+                                    <LoginreisterLoginTypeSelect @select="selectRegisterType" />
+                                    <input type="text" :placeholder="registerPlaceholder" :maxlength="inputMaxLength"
+                                        :clearable="true" v-model="registerNumber">
+                                    <button class="yzm" @click="getYzm" v-bind:disabled="isBtnDisabled"
+                                        :style="isBtnDisabled ? 'cursor: not-allowed; color: #808385;' : 'color: #00aeec;'">{{
+                                            yzmTimeText
+                                        }}</button>
+                                </div>
+                                <div class="input-box input-box-bottom">
+                                    <span>验证码</span>
+                                    <input type="text" placeholder="请输入验证码" maxlength="6" v-model="verificationCode">
+                                </div>
+                                <button class="submit" @click="register"
+                                    :class="agreement ? '' : 'disabled'">授权并登录/注册</button>
+                            </form>
+                            <div class="scan-box" v-show="isCardActive === 'scan'">
+                                <div class="scan__qrcode">
+                                    <div class="qrcode"></div>
+                                    <div class="qrcode__tip" :style="agreement ? 'opacity: 0;' : ''">
+                                        <img src="@/assets/img/qrcode-tip.png">
+                                        <span>请先阅读并勾选</span>
+                                        <span>同意下方协议</span>
                                     </div>
                                 </div>
-                                <div class="register-box" v-if="isCardActive === 'verificationCode'">
-                                    <form class="input-box input-box-top">
-                                        <!-- <span>手机号</span> -->
-                                        <LoginreisterLoginTypeSelect @select="selectRegisterType"/>
-                                        <input type="text" :placeholder="registerPlaceholder" :maxlength="inputMaxLength" :clearable="true" v-model="registerNumber">
-                                        <button class="yzm" @click="getYzm" v-bind:disabled="isBtnDisabled" :style="isBtnDisabled ? 'cursor: not-allowed; color: #808385;' : 'color: #00aeec;'">{{ yzmTimeText }}</button>
-                                    </form>
-                                    <form class="input-box input-box-bottom">
-                                        <span>验证码</span>
-                                        <input type="text" placeholder="请输入验证码" maxlength="6" v-model="verificationCode">
-                                    </form>
-                                    <button  class="submit" @click="register" :class="agreement ? '' : 'disabled'">授权并登录/注册</button>
-                                </div>
-                                <div class="scan-box" v-if="isCardActive === 'scan'">
-                                    <div class="scan__qrcode">
-                                        <div class="qrcode"></div>
-                                        <div class="qrcode__tip" :style="agreement ? 'opacity: 0;' : ''">
-                                            <img src="@/assets/img/qrcode-tip.png">
-                                            <span>请先阅读并勾选</span>
-                                            <span>同意下方协议</span>
-                                        </div>
-                                    </div>
-                                    <p>使用手机 <a target="_blank" href="" class="clickable">哈哩哈哩客户端</a></p>
-                                    <p>扫码登录立即绑定</p>
-                                </div>
+                                <p>使用手机 <a target="_blank" href="" class="clickable">哈哩哈哩客户端</a></p>
+                                <p>扫码登录立即绑定</p>
                             </div>
                         </div>
-                    </div>    
-                    <div class="tips" ><input type="checkbox" class="checkbox" v-model="agreement">我已阅读并同意<span class="agreement">用户协议</span>&nbsp;和&nbsp;<span class="agreement">隐私政策</span></div>                 
+                    </div>
+                </div>
+                <div class="tips">
+                    <Checkbox v-model:checked="agreement">
+                        我已阅读并同意
+                        <span class="agreement">用户协议</span>&nbsp;和&nbsp;<span class="agreement">隐私政策</span>
+                    </Checkbox>
+                </div>
             </div>
         </div>
+        <Footer></Footer>
         <!-- Captcha验证码弹出框 -->
         <Captcha @isshowCaptcha="isshowCaptcha" v-if="showCaptchaBox"></Captcha>
     </div>
@@ -157,8 +171,21 @@ const inputMaxLength = ref(11);
 const uidRegex = /^[1-9]\d{17}$/; // 18位数字，首位不能为0
 const phoneRegex = /^1[3-9]\d{9}$/; // 11位数字
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // 常见的邮箱格式
-const snsBinType = ref("weibo");
+const snsBindType = ref("");
 const agreement = ref(false);
+// 获取当前路由对象
+const route = useRoute();
+const router = useRouter();
+if (route.query.sns_platform && route.query.sns_state) {
+    if (route.query.sns_platform === 'weibo' || route.query.sns_platform === 'alipay' || route.query.sns_platform === 'qq') {
+        snsBindType.value = route.query.sns_platform.toString();
+    } else {
+        router.push("/");
+    }
+
+} else {
+    router.push("/");    
+}
 // captcha验证回调
 const isshowCaptcha = (captchaId: string) => {
     showCaptchaBox.value = false;
@@ -191,12 +218,12 @@ const registerReqData = reactive<RegisterReq>({
     verifyCode: ""
 });
 // 倒计时剩余时间
-const remainingTime = reactive ({
+const remainingTime = reactive({
     seconds: totalTime
 })
 // 计时器变量
 let timer: NodeJS.Timeout | null = null
- 
+
 // 倒计时
 const startCountingDown = () => {
     if (!countingDown.value) {
@@ -211,9 +238,9 @@ const startCountingDown = () => {
         } else {
             stopCountingDown()
         }
-    },1000)
+    }, 1000)
 }
- 
+
 // 倒计时停止
 const stopCountingDown = () => {
     if (timer) {
@@ -222,12 +249,12 @@ const stopCountingDown = () => {
         countingDown.value = false
         sessionStorage.removeItem('EndTime')  //计时完后清除sessionStorage
     }
-    
+
 }
 // 短信按钮文字切换
-const yzmTimeText = computed (() => (countingDown.value ? remainingTime.seconds +"秒后重试" : "获取验证码"));
+const yzmTimeText = computed(() => (countingDown.value ? remainingTime.seconds + "秒后重试" : "获取验证码"));
 // 获取验证码
-const getYzm = async (event: Event)  => {
+const getYzm = async (event: Event) => {
     event.preventDefault();
     // 为了减小后端压力，首先对格式进行验证
     if (registerType.value === "phone") {
@@ -266,12 +293,12 @@ const getVerificationCode = async (getCodeReqData: GetCodeReq) => {
     }
 };
 // 监听按钮是否倒数120s 实现按钮点击事件的禁用
-watchEffect (() => {  
+watchEffect(() => {
     // console.log(phoneNumber.value);
     if (countingDown.value) {
-        isBtnDisabled.value=true;
-    }else {
-        isBtnDisabled.value=false;
+        isBtnDisabled.value = true;
+    } else {
+        isBtnDisabled.value = false;
     }
 })
 
@@ -283,7 +310,8 @@ const XianshiMima = () => {
     isxianshimima.value = true;
     // console.log(isxianshimima)
 }
-const switchLoginCard = (loginType: string) => {
+const switchLoginCard = (event: MouseEvent, loginType: string) => {
+    event.preventDefault();
     if (loginType === isCardActive.value) {
         return;
     }
@@ -308,9 +336,9 @@ const loginRequest = async (captchaId: string) => {
     if (response.code === 200 && response.data) {
         Message.success(response.msg);
         localStoragejwt(
-            response.data.device, 
-            response.data.loginType, 
-            response.data.hl_ticket, 
+            response.data.device,
+            response.data.loginType,
+            response.data.hl_ticket,
             response.data.hl_ticket_expires,
             response.data.uid
         );
@@ -335,7 +363,8 @@ const determineInputType = (input: string): string => {
     }
 }
 // 登录
-const login = async () => {
+const login = async (event: MouseEvent) => {
+    event.preventDefault();
     if (usernameLogin.value === "") {
         Message.error("账号不能为空");
         return;
@@ -370,13 +399,14 @@ const selectRegisterType = (registerTypeId: number) => {
     }
 }
 // 注册
-const register = async () => {
+const register = async (event: MouseEvent) => {
+    event.preventDefault();
     if (registerType.value === 'phone') {
         // 手机号注册
-        if (registerNumber.value.length == 0){
+        if (registerNumber.value.length == 0) {
             Message.error("手机号不能为空");
             return;
-        } else if ( !phoneRegex.test(registerNumber.value)) {
+        } else if (!phoneRegex.test(registerNumber.value)) {
             Message.error("手机号格式不正确");
             return;
         } else if (verificationCode.value.length == 0) {
@@ -390,10 +420,10 @@ const register = async () => {
         registerReqData.phone = registerNumber.value;
     } else if (registerType.value === 'mail') {
         // 邮箱注册
-        if (registerNumber.value.length == 0){
+        if (registerNumber.value.length == 0) {
             Message.error("邮箱地址不能为空");
             return;
-        } else if ( !emailRegex.test(registerNumber.value)) {
+        } else if (!emailRegex.test(registerNumber.value)) {
             Message.error("邮箱地址格式不正确");
             return;
         } else if (verificationCode.value.length == 0) {
@@ -411,9 +441,9 @@ const register = async () => {
     if (response.code === 200 && response.data) {
         Message.success(response.msg);
         localStoragejwt(
-            response.data.device, 
-            response.data.loginType, 
-            response.data.hl_ticket, 
+            response.data.device,
+            response.data.loginType,
+            response.data.hl_ticket,
             response.data.hl_ticket_expires,
             response.data.uid
         );
@@ -424,7 +454,7 @@ const register = async () => {
         Message.error(response.msg);
         resetRegisterForm();
     }
-    
+
 }
 // 重置登录表单数据
 const resetLoginForm = () => {
@@ -450,18 +480,18 @@ const resetCodeForm = () => {
 }
 onMounted(async () => {
     //刷新页面时重新取得计时并将计时
-    const count = Math.ceil((JSON.parse(sessionStorage.getItem('EndTime') || '0') - new Date().getTime())/1000);  //取出计时
+    const count = Math.ceil((JSON.parse(sessionStorage.getItem('EndTime') || '0') - new Date().getTime()) / 1000);  //取出计时
     if (count > 0) {
         countingDown.value = true;
         remainingTime.seconds = count;
         timer = setInterval(() => {
-        if (remainingTime.seconds > 0) {
-            remainingTime.seconds--
+            if (remainingTime.seconds > 0) {
+                remainingTime.seconds--
             } else {
                 stopCountingDown()
             }
-        },1000)
-    }else {
+        }, 1000)
+    } else {
         sessionStorage.removeItem('EndTime'); //如果读取的时间小于0则清除sessionStorage数据
     }
 
@@ -475,12 +505,17 @@ onMounted(async () => {
     position: relative;
     min-width: 1058px;
     height: 100%;
+
+    :deep(.header-bar) {
+        position: absolute;
+    }
 }
 
 .sns-bind-top-area {
     display: flex;
     width: 100%;
     position: absolute;
+
     img {
         justify-content: center;
         align-items: center;
@@ -505,11 +540,12 @@ onMounted(async () => {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: calc(100vh - 64px);
+    // height: calc(100vh - 64px);
+    height: 700px;
     min-height: 448px;
 }
 
-.sns-bind-login{
+.sns-bind-login {
     height: 240px;
     width: 900px;
 }
@@ -519,6 +555,7 @@ onMounted(async () => {
     width: 100%;
     height: 100%;
 }
+
 .sns-card .sns-left {
     width: 376px;
     height: 240px;
@@ -538,6 +575,7 @@ onMounted(async () => {
         display: flex;
         flex-direction: column;
         align-items: center;
+
         .sns_thrid_item {
             width: 108px;
             height: 73px;
@@ -564,6 +602,7 @@ onMounted(async () => {
             background: url(@/assets/img/sn_hl.png) no-repeat;
             background-size: 100% 100%;
         }
+
         .sns_thrid_name {
             color: #61666d;
             font-weight: 400;
@@ -588,11 +627,12 @@ onMounted(async () => {
     text-align: center;
     font-size: 14px;
 }
- 
+
 .Vertical-line {
     height: 240px;
     border-right: 1px solid #e3e6e8;
 }
+
 .sns-register-container {
     display: block;
     width: 250px;
@@ -604,24 +644,29 @@ onMounted(async () => {
         .navs {
             display: flex;
             justify-content: center;
+
             .navs-item {
                 display: block;
                 cursor: pointer;
                 font-size: 18px;
                 color: var(--text2);
             }
+
             :nth-child(1) {
                 padding-right: 20px;
                 border-right: .5px solid #e3e6e8;
             }
+
             :nth-child(2) {
                 padding-left: 20px;
                 padding-right: 20px;
                 border-right: .5px solid #e3e6e8;
             }
+
             :nth-child(3) {
                 padding-left: 20px;
             }
+
             .active {
                 color: var(--brand_blue);
             }
@@ -630,7 +675,8 @@ onMounted(async () => {
 }
 
 
-.login-box, .register-box {
+.login-box,
+.register-box {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -657,7 +703,8 @@ onMounted(async () => {
     display: flex;
 }
 
-.login-box .input-box, .register-box .input-box {
+.login-box .input-box,
+.register-box .input-box {
     width: 100%;
     height: 46px;
     font-size: 14px;
@@ -687,6 +734,7 @@ onMounted(async () => {
     input[type="text"] {
         letter-spacing: 0.1rem;
     }
+
     input[type="password"] {
         letter-spacing: 0.1rem;
     }
@@ -696,19 +744,24 @@ onMounted(async () => {
     }
 }
 
-.login-box .input-box-top, .register-box .input-box-top {
+.login-box .input-box-top,
+.register-box .input-box-top {
     border-radius: 10px 10px 0 0;
     border-bottom: none;
 }
-.login-box .input-box-bottom, .register-box .input-box-bottom {
+
+.login-box .input-box-bottom,
+.register-box .input-box-bottom {
     border-radius: 0 0 10px 10px;
 }
 
 .wjma-box {
     padding: 10px 20px;
+
     .wjma-text {
         margin: 0;
         cursor: pointer;
+
         span {
             margin: 0;
             font-size: 13px;
@@ -723,21 +776,24 @@ onMounted(async () => {
     }
 }
 
-.register-box .submit{
+.register-box .submit {
     margin-top: 30px;
     width: 80%;
     height: 40px;
     font-size: 15px;
 }
 
-.xianshimima, .yincangmima {
+.xianshimima,
+.yincangmima {
     display: inline-block;
     height: 25px;
     width: 25px;
     cursor: pointer;
     vertical-align: -8px;
 }
-.xianshimima:hover, .yincangmima:hover {
+
+.xianshimima:hover,
+.yincangmima:hover {
     color: var(--brand_blue);
     fill: var(--brand_blue);
 }
@@ -761,6 +817,7 @@ onMounted(async () => {
     cursor: pointer;
     text-align: center;
 }
+
 .submit {
     color: #fff;
     border: none;
@@ -814,6 +871,7 @@ onMounted(async () => {
         background: url(@/assets/img/qr-code.png);
         background-size: 100% 100%;
     }
+
     .qrcode__tip {
         position: absolute;
         top: 8px;
@@ -825,6 +883,7 @@ onMounted(async () => {
         width: 130px;
         height: 130px;
         background: hsla(0, 0%, 100%, .9);
+
         img {
             margin-bottom: 8px;
             padding: 14px;
@@ -833,6 +892,7 @@ onMounted(async () => {
             background: #fff;
             border-radius: 30px;
         }
+
         span {
             font-style: normal;
             font-weight: 500;
@@ -855,6 +915,7 @@ p {
     border: 0;
     font-weight: 400;
     vertical-align: baseline;
+
     .clickable {
         color: #7e8c8d;
         text-decoration: none;
@@ -868,48 +929,22 @@ p {
     color: var(--text1);
     font-size: 14px;
     text-align: center;
+    vertical-align: middle;
+    height: 18px;
+
     .agreement {
         color: var(--brand_blue);
         margin-left: 4px;
         cursor: pointer;
-    }
-    .checkbox {
-        width: 14px;
-        height: 14px;
-        line-height: 14px;
-        border-radius: 2px;
-        border: 1px solid #bec3cc;
-        cursor: pointer;
-        vertical-align: -5px;
-        margin-right: 6px;
+        vertical-align: middle;
     }
 }
-input[type="checkbox"] {
-    -webkit-appearance: none; /* 移除默认样式 */
-    appearance: none;
-    position: relative;
-}
-input[type="checkbox"]:checked {
-    background-color: #00aeec;
-}
-input[type="checkbox"]:checked::after {
-    position: absolute;
-    content: "";
-    display: flex;
-    top: 1px;
-    left: 1px;
-    width: 10px;
-    height: 10px;
-    align-items: center;
-    background-image: url(@/assets/img/selected.svg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
 
-}
 .disabled {
-    pointer-events: none; /* 禁止鼠标事件 */
-    opacity: 0.5;        /* 减淡颜色，表明禁用状态 */
+    pointer-events: none;
+    /* 禁止鼠标事件 */
+    opacity: 0.5;
+    /* 减淡颜色，表明禁用状态 */
     user-select: none;
     color: #ffffff;
     background: var(--brand_blue);

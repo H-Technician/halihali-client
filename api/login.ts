@@ -8,9 +8,13 @@ export async function loginApi(data: LoginReq) {
 export async function registerApi(data: RegisterReq) {
     return await Http.post<LoginData>('/user/account/register', data);
 }
-// 第三方登录接口
-export async function authLoginApi(data: object, type: string) {
-    return await Http.get<string>(`/OauthLogin/${type}/render`, data);
+// 获取第三方授权接口
+export async function authLoginApi(type: string) {
+    return await Http.get<string>(`/oauth/render/${type}`);
+}
+// 第三方账号绑定接口
+export async function authBindApi(params:object) {
+    return await Http.get('/oauth/web/snsBind', params);
 }
 // 获取验证码接口
 export async function getCodeApi(param: GetCodeReq) {

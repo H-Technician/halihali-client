@@ -46,21 +46,21 @@
                         <div class="login-register-container">
                             <div class="login-register_header">
                                 <div class="navs">
-                                    <div class="navs-item" @click="switchLoginCard('password')" :class="isCardActive === 'password' ? 'active' : ''">
+                                    <div class="navs-item" @click="switchLoginCard($event, 'password')" :class="isCardActive === 'password' ? 'active' : ''">
                                         密码登录
                                     </div>
-                                    <div class="navs-item" @click="switchLoginCard('verificationCode')" :class="isCardActive === 'verificationCode' ? 'active' : ''">
+                                    <div class="navs-item" @click="switchLoginCard($event, 'verificationCode')" :class="isCardActive === 'verificationCode' ? 'active' : ''">
                                         验证码登录
                                     </div>
                                 </div>
                             </div>
                             <div class="login-register_content">
-                                <div class="login-box" v-if="isCardActive === 'password'">
-                                    <form class="input-box input-box-top">
+                                <form class="login-box" v-show="isCardActive === 'password'">
+                                    <div class="input-box input-box-top">
                                         <span>账号</span>
                                         <input type="text" placeholder="请输入账号" v-model="usernameLogin" maxlength="32">
-                                    </form>
-                                    <form class="input-box input-box-bottom">
+                                    </div>
+                                    <div class="input-box input-box-bottom">
                                         <span>密码</span>
                                         <input 
                                         :type="isxianshimima 
@@ -78,7 +78,7 @@
                                             </template>
                                             <template #content>
                                                 <div class="wjma-box" style="width: 300px;">
-                                                    <div @click="switchLoginCard('verificationCode')">
+                                                    <div @click="switchLoginCard($event, 'verificationCode')">
                                                         <div class="wjma-text">
                                                             <span>发送验证码快捷登录</span>
                                                         </div>
@@ -97,25 +97,25 @@
                                                 </div>
                                             </template>
                                         </Popover>
-                                    </form>
+                                    </div>
                                     <div class="submit-box">
-                                        <button class="submit-register" @click="switchLoginCard('verificationCode')">没有账号？立即注册</button>
+                                        <button class="submit-register" @click="switchLoginCard($event, 'verificationCode')">没有账号？立即注册</button>
                                         <button class="submit" @click="login">登录</button>
                                     </div>
-                                </div>
-                                <div class="register-box" v-else>
-                                    <form class="input-box input-box-top">
+                                </form>
+                                <form class="register-box" v-show="isCardActive === 'verificationCode'">
+                                    <div class="input-box input-box-top">
                                         <!-- <span>手机号</span> -->
                                         <LoginreisterLoginTypeSelect @select="selectRegisterType"/>
                                         <input type="text" :placeholder="registerPlaceholder" :maxlength="inputMaxLength" :clearable="true" v-model="registerNumber">
                                         <button class="yzm" @click="getYzm" v-bind:disabled="isBtnDisabled" :style="isBtnDisabled ? 'cursor: not-allowed; color: #808385;' : 'color: #00aeec;'">{{ yzmTimeText }}</button>
-                                    </form>
-                                    <form class="input-box input-box-bottom">
+                                    </div>
+                                    <div class="input-box input-box-bottom">
                                         <span>验证码</span>
                                         <input type="text" placeholder="请输入验证码" maxlength="6" v-model="verificationCode">
-                                    </form>
+                                    </div>
                                     <button  class="submit" @click="register">登录/注册</button>
-                                </div>
+                                </form>
                             </div>
                             <div class="login-oauth">
                                 <div class="divider">
@@ -153,6 +153,7 @@
                     <div class="tips" >登录代表你同意<span class="agreement">用户协议</span>&nbsp;和&nbsp;<span class="agreement">隐私政策</span></div>                 
               </div>
           </div>
+          <Footer></Footer>
           <!-- Captcha验证码弹出框 -->
         <Captcha @isshowCaptcha="isshowCaptcha" v-if="showCaptchaBox"></Captcha>
     </div>
@@ -177,6 +178,7 @@ const showCaptchaBox = ref(false);
 const loginType = ref("");
 const registerType = ref("phone");
 const inputMaxLength = ref(11);
+const router = useRouter();
 // 定义正则表达式用于判断登录类型
 const uidRegex = /^[1-9]\d{11}$/; // 18位数字，首位不能为0
 const phoneRegex = /^1[3-9]\d{9}$/; // 11位数字
@@ -305,7 +307,8 @@ const XianshiMima = () => {
     isxianshimima.value = true;
     // console.log(isxianshimima)
 }
-const switchLoginCard = (loginType: string) => {
+const switchLoginCard = (event: MouseEvent, loginType: string) => {
+    event.preventDefault();
     if (loginType === isCardActive.value) {
         return;
     }
@@ -357,7 +360,8 @@ const determineInputType = (input: string): string => {
     }
 }
 // 登录
-const login = async () => {
+const login = async (event: MouseEvent) => {
+    event.preventDefault();
     if (usernameLogin.value === "") {
         Message.error("账号不能为空");
         return;
@@ -392,7 +396,8 @@ const selectRegisterType = (registerTypeId: number) => {
     }
 }
 // 注册
-const register = async () => {
+const register = async (event: MouseEvent) => {
+    event.preventDefault();
     if (registerType.value === 'phone') {
         // 手机号注册
         if (registerNumber.value.length == 0){
@@ -451,9 +456,9 @@ const register = async () => {
 // 第三方登录
 const authLogin = async (type: string) => {
     const data = { pageIdentifier: 'platform'};
-    const response = await authLoginApi(data, type);
-    if (response.code === 200) {
-        window.open(response.data, '_self');
+    const response = await authLoginApi(type);
+    if (response.code === 200 && response.data) {
+        window.location.href = response.data;
     } else {
         Message.error(response.msg);
     }
@@ -535,7 +540,7 @@ onMounted(async () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 800px;
     min-height: 524px;
 }
 
@@ -581,6 +586,7 @@ onMounted(async () => {
     padding: 6px;
     border-radius: 6px;
     border: 1px solid #e3e6e8;
+    box-sizing: content-box;
 }
  
 .qrcode-img {
@@ -639,7 +645,7 @@ onMounted(async () => {
     position: absolute;
     width: 330px;
     height: 192px;
-    top: -10px;
+    top: -19px;
     left: -80px;
     // margin-left: -240px;
     background: url(@/assets/img/qr-tips.png) no-repeat;

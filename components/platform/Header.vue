@@ -11,7 +11,7 @@
                     <span>创作中心</span>
                 </div>
                 <a href="/" target="_blank" class="platform-entry">
-                    <IconsHeaderbarTitleLogo class="index-iconfont"/>
+                    <IconsHeaderbarTitleLogo class="index-iconfont" />
                     <span>主站</span>
                 </a>
             </div>
@@ -20,37 +20,37 @@
                 <Popover popStyle="padding-top: 8px;">
                     <template #reference>
                         <a href="/" target="_blank" class="avatar-box">
-                            <picture class="avatar" :style="userInfo ? '' : 'display: none;'">
-                                <source type="image/webp" srcset="">
-                                <img src="@/assets/img/defaultAvatar.svg" alt="默认头像" style="position: absolute;" :style="isloadImg ? 'display: none;' : ''"/>
-                                <img :src="`https://static.v.hblog.top${userInfo?.avatar}`" :alt="userInfo?.uid+'头像'" v-if="isloadImg"/>
+                            <picture class="avatar">
+                                <source :srcset="userInfo?.avatar?.avatar_225?.webp_url" type="image/webp">
+                                <source :srcset="userInfo?.avatar?.avatar_225?.jpg_url" type="image/jpg">
+                                <img :src="userInfo?.avatar?.avatar_225?.webp_url" :alt="userInfo?.uid + '头像'" />
                             </picture>
                         </a>
                         <div class="avatar"></div>
                     </template>
                     <template #content>
-                        <PlatformAvatarPopover/>
+                        <PlatformAvatarPopover />
                     </template>
                 </Popover>
                 <div class="tips">
                     成为UP主的第1145天
-                    <IconsArrowRight class="icon-right"/>
+                    <IconsArrowRight class="icon-right" />
                 </div>
                 <div class="line-divid"></div>
                 <Popover popStyle="padding-top: 18px;">
                     <template #reference>
                         <a href="" target="_blank" class="message">
                             <div class="num">13</div>
-                            <IconsPlatformXinFeng class="icon-message"/>
+                            <IconsPlatformXinFeng class="icon-message" />
                         </a>
                     </template>
                     <template #content>
                         <div><span>测试</span></div>
                     </template>
                 </Popover>
-                    <div class="download">
-                        <IconsPlatformXiaZai class="icon-download"/>
-                    </div>
+                <div class="download">
+                    <IconsPlatformXiaZai class="icon-download" />
+                </div>
             </div>
         </div>
     </div>
@@ -68,12 +68,12 @@ const getUserInfo = async () => {
     const response = await getUserInfoApi(); // 获取用户信息
     if (response.code === 200) {
         userInfo.value = response.data as UserInfo;
-        const avatarUrl = userInfo.value.avatar;
-        await loadImage("https://static.v.hblog.top" + avatarUrl, () => {
-        isloadImg.value = true;
-        }, (error) => {
-        console.error('图片加载失败:', error.message);
-        });
+        // const avatarUrl = userInfo.value.avatar;
+        // await loadImage("https://static.v.hblog.top" + avatarUrl, () => {
+        //     isloadImg.value = true;
+        // }, (error) => {
+        //     console.error('图片加载失败:', error.message);
+        // });
     } else if (response.code === 401) {
         isLogin.value = false;
         removeLocalStoragejwt();
@@ -82,10 +82,10 @@ const getUserInfo = async () => {
     } else {
         throw new Error('获取用户信息失败');
     }
-    
+
 }
 
-onBeforeMount(async() => {
+onBeforeMount(async () => {
     if (isLogin.value) {
         await getUserInfo(); // 获取用户信息
     }
@@ -116,7 +116,7 @@ onBeforeMount(async() => {
     padding: 0 100px 0 32px;
     box-sizing: border-box;
     background: #fff;
-    box-shadow: 0 2px 10px 0 rgba(0,0,0,.05);
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .05);
     margin-right: calc(-100vw + 100%);
     min-width: 800px;
     width: 100%;
@@ -200,6 +200,7 @@ onBeforeMount(async() => {
     cursor: pointer;
     overflow: hidden;
 }
+
 .platform-header .header-content .right-block .avatar-box .avatar {
     height: 100%;
     width: 100%;
@@ -214,8 +215,8 @@ onBeforeMount(async() => {
 .platform-header .header-content .right-block .tips {
     display: flex;
     align-items: center;
-    background: rgba(250,142,87,.1);
-    border: 1px solid rgba(250,142,87,.43);
+    background: rgba(250, 142, 87, .1);
+    border: 1px solid rgba(250, 142, 87, .43);
     border-radius: 15px;
     padding: 5px 12px 5px 16px;
     font-size: 12px;
@@ -243,7 +244,7 @@ onBeforeMount(async() => {
     text-decoration: none;
 }
 
-.right-block .message .num{
+.right-block .message .num {
     min-width: 16px;
     height: 16px;
     padding: 0 2px;
@@ -265,6 +266,7 @@ onBeforeMount(async() => {
     fill: #757575;
     color: #757575;
 }
+
 .platform-header .header-content .right-block .download {
     margin-left: 30px;
     cursor: pointer;
@@ -276,5 +278,4 @@ onBeforeMount(async() => {
     color: #757575;
     fill: #757575;
 }
-
 </style>

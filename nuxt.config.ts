@@ -82,6 +82,6 @@ export default defineNuxtConfig({
   },
   layouts: {
     default: null, // 不使用布局
-  }
+  },
   
 })

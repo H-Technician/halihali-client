@@ -3,13 +3,15 @@
         <div class="sub-reply-item">
             <div class="sub-root-reply-container">
                 <div class="sub-root-reply-avatar-wrap">
-                    <a href="" class="sub-root-reply-avatar">
+                    <a href="" class="sub-root-reply-avatar" target="_blank" ref="subReplyAvatarRef"
+                        @mouseenter="handleMouseEnter('avatar')" @mouseleave="handleMouseLeave">
                         <AvatarVAvatar :avatarStyle="{ width: '24px', height: '24px' }" />
                     </a>
                 </div>
                 <div class="sub-content-wrap">
                     <div class="user-info">
-                        <a href="" target="_blank" class="user-name">
+                        <a href="" target="_blank" class="user-name" ref="subReplyNameRef"
+                        @mouseenter="handleMouseEnter('name')" @mouseleave="handleMouseLeave">
                             Admin
                         </a>
                         <!-- UP主标识 -->
@@ -77,12 +79,115 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="isShowUserCard" class="teleport is-hidden">
+                    <Teleport to="#userProfileWrap" :disabled="isDisabledTeleport">
+                        <UsercardUserCard />
+                    </Teleport>
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
+let usercardWrap: HTMLElement | null;
+const subReplyAvatarRef = ref<HTMLDivElement | null>(null);
+const subReplyNameRef = ref<HTMLDivElement | null>(null);
+const isShowUserCard = ref<boolean>(false);
+const isDisabledTeleport = ref<boolean>(true);
+let inTimer: ReturnType<typeof setTimeout>;
 
+const mouseEnter = () => {
+    clearTimeout(inTimer);
+    usercardWrap?.addEventListener('mouseleave', mouseLeave);
+}
+
+const mouseLeave = () => {
+    usercardWrap?.removeEventListener('mouseenter', mouseEnter);
+    usercardWrap?.removeEventListener('mouseleave', mouseLeave);
+    inTimer = setTimeout(() => {
+        hideUserCard();
+    }, 200);
+}
+const handleMouseEnter = (element: string) => {
+    clearTimeout(inTimer);
+    if (!usercardWrap) {
+        usercardWrap = document.getElementById('userProfileWrap');
+        isShowUserCard.value = true;
+    }
+    if (element === 'avatar') {
+        showAvatarUserCard();
+    } else if (element === 'name') {
+        showNameUserCard();
+    }
+    usercardWrap?.addEventListener('mouseenter', mouseEnter);
+    setTimeout(() => {
+        if (usercardWrap?.style.display === 'none') {
+            if (element === 'avatar') {
+                showAvatarUserCard();
+            } else if (element === 'name') {
+                showNameUserCard();
+            }
+        }
+    }, 200);
+};
+
+const handleMouseLeave = () => {
+    inTimer = setTimeout(() => {
+        hideUserCard();
+    }, 200);
+
+};
+
+const showAvatarUserCard = () => {
+    if (subReplyAvatarRef.value && usercardWrap) {
+        const rect = subReplyAvatarRef.value.getBoundingClientRect();
+        usercardWrap.style.left = (rect.left + 12) + 'px';
+        if (rect.top > 321) {
+            usercardWrap.style.top = (rect.top - 260) + 'px';
+        } else {
+            usercardWrap.style.top = (rect.top + 27) + 'px';
+        }
+        isDisabledTeleport.value = false;
+        usercardWrap.style.removeProperty('display');
+        usercardWrap.addEventListener('mouseenter', mouseEnter);
+    }
+}
+
+const showNameUserCard = () => {
+    if (subReplyNameRef.value && usercardWrap) {
+        const rect = subReplyNameRef.value.getBoundingClientRect();
+        usercardWrap.style.left = (rect.left + rect.width/2) + 'px';
+        if (rect.top > 321) {
+            usercardWrap.style.top = (rect.top - 260) + 'px';
+        } else {
+            usercardWrap.style.top = (rect.top + rect.height + 3) + 'px';
+        }
+        isDisabledTeleport.value = false;
+        usercardWrap.style.removeProperty('display');
+        usercardWrap.addEventListener('mouseenter', mouseEnter);
+    }
+}
+
+const hideUserCard = () => {
+    if (usercardWrap) {
+        usercardWrap.style.removeProperty('top');
+        usercardWrap.style.left = '0px';
+        usercardWrap.style.top = '0px';
+        usercardWrap.style.display = 'none';
+    }
+    isDisabledTeleport.value = true;
+}
+
+onMounted(async () => {
+    usercardWrap = document.getElementById('userProfileWrap');
+    if (usercardWrap) {
+        isShowUserCard.value = true;
+    };
+});
+onUnmounted(() => {
+    usercardWrap?.removeEventListener('mouseenter', mouseEnter);
+    usercardWrap?.removeEventListener('mouseleave', mouseLeave);
+});
 </script>
 <style lang="scss" scoped>
 .sub-reply-list {
@@ -102,6 +207,10 @@
 
                 .sub-root-reply-avatar {
                     cursor: pointer;
+
+                    :deep(.v-img) {
+                        border: none;
+                    }
                 }
             }
 
@@ -288,6 +397,10 @@
                     }
                 }
 
+            }
+
+            .is-hidden {
+                display: none;
             }
         }
 

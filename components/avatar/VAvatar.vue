@@ -1,8 +1,9 @@
 <template>
-    <div class="hl-avatar" :style="props.avatarStyle">
+    <div class="hl-avatar" :class="avatarSizeClass" :style="props.avatarStyle">
         <picture class="v-img">
             <img
                 src="//io.v.hblog.top/hfs/face/706353e46fe1c390d6d2cb72a704818a.jpg@240w_240h_1c_1s_!web-avatar-nav.webp" />
+            <span class="hl-avatar-icon hl-avatar-right-icon  hl-avatar-icon-personal"></span>
         </picture>
     </div>
 </template>
@@ -10,9 +11,22 @@
 import type { CSSProperties } from 'vue';
 interface Props {
     avatarStyle?: CSSProperties // 头像样式
+    size?: 40 | 48 | 50 | 60 // 头像大小
 }
 const props = withDefaults(defineProps<Props>(), {
     avatarStyle: undefined,
+    size: 48,
+});
+const avatarSizeClass = computed(() => {
+    if (props.size === 40) {
+        return 'hl-avatar-size-40';
+    } else if (props.size === 48) {
+        return 'hl-avatar-size-48'
+    } else if (props.size === 50) {
+        return 'hl-avatar-size-50'
+    } else if (props.size === 60) {
+        return 'hl-avatar-size-60'
+    }
 });
 </script>
 <style lang="scss" scoped>
@@ -30,14 +44,12 @@ const props = withDefaults(defineProps<Props>(), {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    overflow: hidden;
 
     .v-img {
         width: 100%;
         height: 100%;
         display: block;
         border-radius: 50%;
-        overflow: hidden;
         border: 2px solid hsla(0, 0%, 100%, .4);
 
         img {
@@ -48,7 +60,42 @@ const props = withDefaults(defineProps<Props>(), {
             image-rendering: -webkit-optimize-contrast;
             width: 100%;
             height: 100%;
+            border-radius: 50%;
+        }
+
+        .hl-avatar-right-icon {
+            width: 27.5%;
+            height: 27.5%;
+            position: absolute;
+            right: 0;
+            bottom: -1px;
+            background-size: cover;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        .hl-avatar-icon-personal {
+            background-image: url(@/assets/img/personal.svg);
         }
     }
+}
+
+.hl-avatar-size-40 {
+    width: 40px;
+    height: 40px;
+}
+
+.hl-avatar-size-48 {
+    width: 48px;
+    height: 48px;
+}
+
+.hl-avatar-size-50 {
+    width: 50px;
+    height: 50px;
+}
+
+.hl-avatar-size-60 {
+    width: 60px;
+    height: 60px;
 }
 </style>

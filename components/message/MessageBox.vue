@@ -38,6 +38,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
+import { rafTimeout } from '@/utils/rafTimeout';
 interface Props {
   duration?: number // 自动关闭的延时，单位 ms
   top?: string | number // 消息距离顶部的位置，单位 px
@@ -52,9 +53,9 @@ const showMessage = ref<boolean>(false);
 const emit = defineEmits(['close']);
 const show = () => {
   showMessage.value = true
-  setTimeout(() => {
+  rafTimeout(() => {
     showMessage.value = false
-    setTimeout(() => {
+    rafTimeout(() => {
       emit('close');
     }, 300);
   }, props.duration)
@@ -103,6 +104,7 @@ onMounted(() => {
       0 3px 6px -4px rgba(0, 0, 0, 0.12),
       0 9px 28px 8px rgba(0, 0, 0, 0.05);
     pointer-events: auto; // 保证内容区域部分可以正常响应鼠标事件
+    box-sizing: content-box;
 
     .icon-svg {
       display: inline-block;

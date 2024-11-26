@@ -208,13 +208,15 @@ const sideLinkList: sideLinkItem[] = [
                             align-items: center;
                             position: relative;
                             color: #6b757b;
-
+                            
                             &::before {
-                                content: "\25cf";
+                                content: "\e608";
+                                font-family: "iconfont" !important;
                                 line-height: 20px;
                                 width: 10px;
                                 height: 20px;
                                 text-align: center;
+                                font-size: 20px;
                             }
 
                             a {

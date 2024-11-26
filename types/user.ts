@@ -2,7 +2,7 @@
 export interface UserInfo {
     uid: string,
     nickname: string,
-    avatar: string,
+    avatar: Avatar | null,
     mail: string,
     phone: string,
     background: string,
@@ -13,4 +13,16 @@ export interface UserInfo {
     vip: number,
     auth: number,
     auth_msg: string,
+}
+
+export interface Avatar {
+    avatar_25: AvatarUrls | null;
+    avatar_125: AvatarUrls | null;
+    avatar_225: AvatarUrls | null;
+}
+
+export interface AvatarUrls {
+    png_url: string;
+    jpg_url: string;
+    webp_url: string;
 }

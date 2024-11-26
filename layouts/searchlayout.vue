@@ -4,18 +4,12 @@
         class="search-header-bar"
         :isFixedHeader="true" 
         :isShadow="true" 
-        :isShowCenter="false" 
-        :isDisplayHeader="props.isDisplayHeader"/>
+        :isShowCenter="false"/>
         <slot />
     </div>
 </template>
 <script setup lang="ts">
-interface Props {
-    isDisplayHeader?: boolean; // 是否显示头部
-}
-const props = withDefaults(defineProps<Props>(), {
-    isDisplayHeader: true
-});
+
 </script>
 <style scoped lang="scss">
 .hl-layout {

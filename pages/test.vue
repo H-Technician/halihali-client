@@ -1,8 +1,8 @@
 <template>
-    <NuxtLayout name="searchlayout">
+    <NuxtLayout name="publiclayout">
         <Title>哈哩哈哩 (゜-゜)つロ 干杯~-halohalo-测试页面1-{{ title }}</Title>
         <div class="test">
-            <span style="display: block; height: 200px; width: 200px;">
+            <!-- <span style="display: block; height: 200px; width: 200px;">
                 <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" data-pointer="none" style="enable-background:new 0 0 22 22" viewBox="0 0 22 22">
                     <path d="M10.188 4.65 6 8H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1l4.188 3.35a.5.5 0 0 0 .812-.39V5.04a.498.498 0 0 0-.812-.39zM14.446 3.778a1 1 0 0 0-.862 1.804 6.002 6.002 0 0 1-.007 10.838 1 1 0 0 0 .86 1.806A8.001 8.001 0 0 0 19 11a8.001 8.001 0 0 0-4.554-7.222z"></path>
                     <path d="M15 11a3.998 3.998 0 0 0-2-3.465v6.93A3.998 3.998 0 0 0 15 11z"></path>
@@ -13,7 +13,7 @@
                     <path d="M15 11a3.998 3.998 0 0 0-2-3.465v2.636l1.865 1.865A4.02 4.02 0 0 0 15 11z"></path>
                     <path d="M13.583 5.583A5.998 5.998 0 0 1 17 11a6 6 0 0 1-.585 2.587l1.477 1.477a8.001 8.001 0 0 0-3.446-11.286 1 1 0 0 0-.863 1.805zM18.778 18.778l-2.121-2.121-1.414-1.414-1.415-1.415L13 13l-2-2-3.889-3.889-3.889-3.889a.999.999 0 1 0-1.414 1.414L5.172 8H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1l4.188 3.35a.5.5 0 0 0 .812-.39v-3.131l2.587 2.587-.01.005a1 1 0 0 0 .86 1.806c.215-.102.424-.214.627-.333l2.3 2.3a1.001 1.001 0 0 0 1.414-1.416zM11 5.04a.5.5 0 0 0-.813-.39L8.682 5.854 11 8.172V5.04z"></path>
                 </svg>
-            </span>
+            </span> -->
             <div class="tooltip-test">
                 <div class="text-test">
                     真好呀,不错不错哟
@@ -28,17 +28,15 @@
                 <!-- <div class="ui-tip ui-tip-arrow ui-tip-arrow-up ui-theme-black"  id="tip_1">箭头向上的tip层</div> -->
                 <!-- <div class="ui-tip ui-tip-arrow ui-tip-arrow-down ui-theme-black"  id="tip_2">just code it!</div> -->
             </div>
-            <div style="width: 150px; height: 150px;">
-                <!-- <svg width="150" height="150" viewBox="0 0 150 150"> -->
-                    <!-- 设置背景 -->
-                    <!-- <circle cx="75" cy="75" r="60" fill="#000" />
+            <!-- <div style="width: 150px; height: 150px;">
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <circle cx="75" cy="75" r="60" fill="#000" />
                     <circle cx="75" cy="75" r="60" fill="none" stroke="#ddd" stroke-width="8" />
-                    <circle ref="progressCircle" id="progressCircle" cx="75" cy="75" r="60" fill="none" stroke="#fff" stroke-width="8" stroke-dasharray="377" stroke-dashoffset="0"></circle> -->
-                    <!-- 叉符号 -->
-                    <!-- <path d="M 50,50 L 100,100 M 50,100 L 100,50" stroke="#fff" stroke-width="4" fill="none" />
-                </svg> -->
+                    <circle ref="progressCircle" id="progressCircle" cx="75" cy="75" r="60" fill="none" stroke="#fff" stroke-width="8" stroke-dasharray="377" stroke-dashoffset="0"></circle>
+                    <path d="M 50,50 L 100,100 M 50,100 L 100,50" stroke="#fff" stroke-width="4" fill="none" />
+                </svg>
                 <IconsPlayClose />
-            </div>
+            </div> -->
             <!-- <svg t="1722476693366" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4300" width="48" height="48">
                 <path d="M801.856 734.016 579.904 512l222.016-222.016c18.816-18.816 18.88-49.152 0.064-67.968-18.752-18.752-49.216-18.752-67.904 0L512 444.032 289.92 222.016c-18.688-18.752-49.088-18.752-67.904 0C203.328 240.768 203.328 271.232 222.144 290.048L444.096 512l-222.016 221.952c-18.816 18.752-18.816 49.152-0.064 67.968C231.424 811.392 243.84 816 256 816s24.576-4.608 33.92-14.016L512 579.968l222.08 222.016c9.408 9.344 21.696 14.016 33.92 14.016 12.288 0 24.576-4.608 33.92-14.016C820.672 783.104 820.736 752.768 801.856 734.016z" p-id="4301"></path>
             </svg> -->
@@ -63,24 +61,22 @@
             <!-- <div style="width: 600px; height: 160px;">
                 <Editor width="700px" height="160px" :disabled="true" placeholder="填写更全面的相关信息，让更多的人能找到你的视频吧(:" v-model:model-value="videoUrl"/>
             </div> -->
-            <input
+            <!-- <input
                 type="file"
                 ref="videoInput"
                 @change="handleImagesChange"
                 style="height: 40px; width: 900px;"
-            >
+            > -->
             <!-- <DialogDiaLog :showDialog="showCaptchaBox" width="800">
                 <template #content>
                     <CropperComp :videoFile="file1" v-if="showCaptchaBox"/>
                 </template>
             </DialogDiaLog> -->
-            <DialogDiaLog :showDialog="showCaptchaBox" width="1030" @isShowDialog="isShowDialog4">
+            <!-- <DialogDiaLog :showDialog="showCaptchaBox" width="1030" @isShowDialog="isShowDialog4">
                 <template #content>
                     <PlatformCardUploadVideoCard :file="file1" />
                 </template>
-            </DialogDiaLog>
-            <Radio :options="options" v-model:value="value"/>
-            <div class="test-before"></div>
+            </DialogDiaLog> -->
             <!-- <Loading /> -->
         </div>
     </NuxtLayout>

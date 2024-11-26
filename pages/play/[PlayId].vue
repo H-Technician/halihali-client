@@ -1,22 +1,30 @@
 <template>
-    <NuxtLayout name="publiclayout" :isDisplayHeader="isDisplayHeader">
+    <NuxtLayout name="publiclayout">
         <Title>西游记-电视剧-全集-高清正版在线观看-halihali-哈哩哈哩</Title>
         <div class="home-container" :class="isWideScreen ? 'wide' : ''">
             <div class="main-container">
-                <div id="playerWrap" class="video_player" :class="isWideScreen ? 'wide-video_player' : ''"></div>
-                <!-- style="margin-bottom: -2680px; min-height: 2680px;" -->
-                <div class="plp-l sticky" >
+                <div id="playerWrap" class="video_player"
+                    :class="[isWideScreen ? 'wide-video_player' : '', , isLoading ? 'player-loading' : '']">
+                    <div class="player-sendBar_skeleton" v-if="isLoading">
+                        <div class="skeleton-loading video-info"></div>
+                        <div class="skeleton-loading video-info-online"></div>
+                        <div class="skeleton-loading dm-setting"></div>
+                        <div class="skeleton-loading dm-send"></div>
+                    </div>
+                </div>
+                <div class="plp-l sticky">
                     <div class="player-left-components">
                         <VideoinfoVideoToolbar />
                         <VideoinfoMediainfo />
                         <div class="comment_comment_wrapper" ref="commentWrapRef">
                             <ClientOnly>
-                                <VideocommentComment />
+                                <VideocommentComment :isWideScreen="isWideScreen" />
                             </ClientOnly>
                         </div>
                     </div>
                 </div>
-                <div class="plp-r sticky" :style="isWideScreen ? 'top: calc(var(--containerWidth)* .5625 + var(--danmu-bar-height) + 8px);' : ''">
+                <div class="plp-r sticky"
+                    :style="isWideScreen ? 'top: calc(var(--containerWidth)* .5625 + var(--danmu-bar-height) + 8px);' : ''">
                     <div id="danmukuBox" class="danmaku-box"></div>
                     <VideoinfoEplisList />
                     <VideoinfoRecommendList />
@@ -33,15 +41,9 @@ const isDisplayHeader = ref(true);
 const isWideScreen = ref<boolean>(false);
 const dashUrl = ref<string>('https://io.v.hblog.top/hfs/video/159748237287362560/159748237287362560.mpd');
 const conOffsetLeft = ref<number>(0);
-const changWebFullScreen = (isWebFullScreen: boolean) => {
-    if (!isWebFullScreen) {
-        isDisplayHeader.value = true;
-    } else {
-        isDisplayHeader.value = false;
-    }
-}
-const onChangWebFullScreen = (isWebFullScreen: boolean) => {
-    isDisplayHeader.value = !isWebFullScreen;
+const isLoading = ref<boolean>(true);
+const onLoadedChange = () => {
+    isLoading.value = false;
 }
 const ontoggleWide = (isWide: boolean) => {
     isWideScreen.value = isWide;
@@ -207,19 +209,9 @@ const handleResize = () => {
     }
 };
 onMounted(async () => {
-    //let playerWrap = document.getElementById("playerWrap")!;
-    // const player = await import('@/components/videoplayer/Player.vue');
-    // if (player) {
-    //     const videoUrl = dashUrl.value;
-    //     const protocol = 'dash';
-    //     const vPlayernode = createVNode(player.default, { videoUrl, protocol, interactionCard, onChangWebFullScreen });
-    //     render(vPlayernode, playerWrap);
-    // }
-    // const route = useRoute();
-    // const videoId = route.params.VideoNumber;
-    // console.log(videoId);
-    const player = await import('@/components/videoplayer/HaliPlayer');
-    await player.default.mountPlayer('#playerWrap', dashUrl.value, interactionCard, '#danmukuBox', onChangWebFullScreen, ontoggleWide);
+    const { Player } = await import('@/components/videoplayer/HaliPlayer');
+    const player = new Player('#playerWrap', dashUrl.value, interactionCard, '#danmukuBox', ontoggleWide, onLoadedChange);
+    player.mountPlayer();
     handleResize(); // 初始时获取一次宽度
     window.addEventListener('resize', handleResize);
 });
@@ -246,6 +238,58 @@ onUnmounted(() => {
             position: relative;
             padding-right: calc(var(--right-bar-width) + 30px);
             height: calc(var(--video-width)* .5625 + var(--danmu-bar-height));
+        }
+
+        .player-loading {
+            background: #000;
+            width: var(--video-width);
+            .player-sendBar_skeleton {
+                height: var(--danmu-bar-height);
+                width: var(--video-width);
+                position: absolute;
+                bottom: 0;
+                background: #fff;
+                z-index: 0;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+
+                .skeleton-loading {
+                    border-radius: 4px;
+                }
+
+                .video-info {
+                    margin-left: 20px;
+                }
+
+                .video-info,
+                .video-info-online {
+                    margin-right: 6px;
+                    min-width: 100px;
+                    height: calc(var(--danmu-bar-height) * 0.3);
+
+                }
+
+                .dm-setting {
+                    min-width: 100px;
+                    margin-right: 6px;
+                }
+
+                .dm-send {
+                    width: 100%;
+                    margin-right: 12px;
+                }
+
+                .dm-setting,
+                .dm-send {
+                    height: calc(var(--danmu-bar-height) * 0.6);
+                }
+
+
+
+            }
         }
 
         .wide-video_player {

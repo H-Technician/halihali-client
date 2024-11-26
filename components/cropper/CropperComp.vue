@@ -178,6 +178,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import { rafTimeout, cancelRaf } from '@/utils/rafTimeout';
 import { uploadCoverBase64Api } from '@/api/upload';
 import type { UploadBase64Cover } from '@/types/upload';
 import type { ImgOriginal, ImgPreview } from "@/types/cropper";
@@ -203,7 +204,7 @@ const mouseRefresh = ref(false); // 鼠标是否移动到
 const context = ref<CanvasRenderingContext2D | null>(null);
 const formattedCurrentTime = ref('00:00');
 const showTooltip = ref<boolean>(false);
-let inTimer: string | number | NodeJS.Timeout | undefined;  // 节流计时器
+let inTimer: ReturnType<typeof rafTimeout>;  // 节流计时器
 const coverCropperRef = ref<InstanceType<typeof CropperCoverCropper> | null>(null);
 const uploadCoverCropperRef = ref<InstanceType<typeof CropperCoverCropper> | null>(null);
 const emit = defineEmits(['CropperCover']); // 裁剪封面完成回调
@@ -445,8 +446,8 @@ const dragging = async (e: MouseEvent | TouchEvent, eventType?: string) => {
         ((newX - startX + initialSliderX / 100 * sliderRect.width) / sliderRect.width) * 100
     ));
     sliderPosition.value = newPosition;
-    clearTimeout(inTimer);
-    inTimer = setTimeout(async () => {
+    cancelRaf(inTimer);
+    inTimer = rafTimeout(async () => {
         if (!uploadVideoElement.value) return;
         const videoDuration = uploadVideoElement.value.duration; // 视频总时长
         const timeInSeconds = videoDuration * (sliderPosition.value / 100);

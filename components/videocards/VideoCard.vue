@@ -87,6 +87,7 @@
 </template>
 <script setup lang="ts">
 import { formatTime } from '@/utils/formatTime';
+import { rafTimeout, cancelRaf } from '@/utils/rafTimeout';
 // https://haliyunoss.oss-cn-chengdu.aliyuncs.com/img/carousel/672w_373h_1c-web-home-common-cover.avif
 const imageUrl = '//io.v.hblog.top/hfs/archive/0d962f2725a461b628d441dcda33eca7.jpg@672w_378h_1c_!web-home-common-cover.jpg';
 const imageUrl3 = '//io.v.hblog.top/hfs/archive/0d962f2725a461b628d441dcda33eca7.jpg@672w_378h_1c_!web-home-common-cover.webp';
@@ -96,7 +97,7 @@ const isImgDownLoad = ref(true);
 const imgRef = ref<HTMLImageElement | null>(null);
 const dashPlayer = ref<any | null>(null); // dashjs实例
 const videoPlayer = ref<HTMLVideoElement | null>(null);
-let inTimer: ReturnType<typeof setTimeout>; // 节流计时器
+let inTimer: ReturnType<typeof rafTimeout>; // 节流计时器
 const videoDuration = ref(0);
 const formattedCurrentTime = ref('00:00');
 const formattedTotalTime = ref('00:00');
@@ -113,12 +114,12 @@ const props = withDefaults(defineProps<Props>(), {
 // 鼠标移入
 const handleMouseOver = async () => {
     // console.log('鼠标移入');
-    clearTimeout(inTimer);
+    cancelRaf(inTimer);
     if (!isLoadedVideo.value) {
         await initPlayer();
         isLoadedVideo.value = true;
     }
-    inTimer = setTimeout(() => {
+    inTimer = rafTimeout(() => {
         isPlayer.value = true;
         videoPlayer.value?.play();
     }, 500);
@@ -127,8 +128,8 @@ const handleMouseOver = async () => {
 // 鼠标移出
 const handleMouseOut = () => {
     // console.log('鼠标移出');
-    clearTimeout(inTimer);
-    inTimer = setTimeout(() => {
+    cancelRaf(inTimer);
+    inTimer = rafTimeout(() => {
         isPlayer.value = false;
         videoPlayer.value?.pause();
     }, 100);

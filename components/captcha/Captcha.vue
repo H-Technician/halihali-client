@@ -54,6 +54,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import { rafTimeout } from '@/utils/rafTimeout';
 import type { CaptchaReq, TempPoints, CaptchaData, CheckCaptchaData } from '@/types/captcha'
 import { getRandomCaptchaApi, checkCaptchaApi } from '@/api/captcha'
 const sliderMoveRef = ref<HTMLDivElement | null>(null);
@@ -189,7 +190,7 @@ const getCaptcha = async () => {
         captchaData.id = responseData.id;
         captchaData.captcha = responseData.captcha;
         initCaptcha(captchaData.captcha.type);
-        setTimeout(() => {
+        rafTimeout(() => {
             loading.value = false;
         }, 200);
     } else {
@@ -211,19 +212,19 @@ const checkCaptcha = async () => {
         msg.value = "验证成功，耗时" + (Date.now() - startTime) / 1000 + '秒';
         showMsg.value = true;
         success.value = true;
-        setTimeout(() => {
+        rafTimeout(() => {
             emit('isshowCaptcha', captchaData.id);
         }, 700);
     } else if (response.code === 6111) {
         msg.value = "验证失败，请重新尝试"
         showMsg.value = true;
-        setTimeout( async () => {
+        rafTimeout( async () => {
             await getCaptcha();
         }, 700);
     } else {
         msg.value = "验证错误，请重新尝试"
         showMsg.value = true;
-        setTimeout( async () => {
+        rafTimeout( async () => {
             await getCaptcha();
         }, 700);  
     }

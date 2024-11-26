@@ -130,6 +130,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { rafTimeout, cancelRaf } from '@/utils/rafTimeout';
 import type { PlayerProfile } from '@/types/player';
 import { getPlayerProfile, setPlayerProfile } from '@/utils/localStoragePlayer';
 import type { InteractionLike, InteractionLink, InteractionVote, InteractionCard } from '@/types/interaction';
@@ -146,10 +147,10 @@ const currentProgress = ref<number>(0); // 当前播放时间
 const isPlaying = ref(false); // 播放状态
 const controlsVisibility = ref(true); // 控制条是否显示
 const controlsShowVisibility = ref(false); // 控制条显示隐藏
-let inCtrlTimer: ReturnType<typeof setTimeout>; // 节流计时器
-let inCtrlShowTimer: ReturnType<typeof setTimeout>; // 控制条显示隐藏节流计时器
-let clickTimer: ReturnType<typeof setTimeout>; // 点击节流计时器
-let volumeHintTimer: ReturnType<typeof setTimeout>; // 音量提示节流计时器
+let inCtrlTimer: ReturnType<typeof rafTimeout>; // 节流计时器
+let inCtrlShowTimer: ReturnType<typeof rafTimeout>; // 控制条显示隐藏节流计时器
+let clickTimer: ReturnType<typeof rafTimeout>; // 点击节流计时器
+let volumeHintTimer: ReturnType<typeof rafTimeout>; // 音量提示节流计时器
 const isShowCursor = ref(true); // 鼠标是否显示
 const isLoading = ref(true); // 加载状态
 const volume = ref(0.25); // 初始音量
@@ -172,7 +173,7 @@ const videoRatio = ref('auto'); // 视频比例 auto 4:3 16:9
 const playerConfig = ref<PlayerProfile>(); // 播放器本地个性化信息
 const testAvatar = ref('https://static.v.hblog.top/images/avatar/706353e46fe1c390d6d2cb72a704818a/706353e46fe1c390d6d2cb72a704818a.webp');
 const emit = defineEmits([
-  'changWebFullScreen',
+  'loadedChange',
   'videoDuration',
   'videocurRentTime',
   'updateCard',
@@ -197,14 +198,14 @@ const props = withDefaults(defineProps<Props>(), {
 });
 // 点击视频播放器区域播放暂停事件
 const clickPlayPause = () => {
-  clearTimeout(clickTimer);
-  clickTimer = setTimeout(() => {
+  cancelRaf(clickTimer);
+  clickTimer = rafTimeout(() => {
     togglePlayPause();
   }, 400);
 };
 // 双击视频播放器区域全屏或退出全屏事件
 const dblclickFullscreen = () => {
-  clearTimeout(clickTimer);
+  cancelRaf(clickTimer);
   toggleFullscreen();
 };
 // 切换播放状态
@@ -330,25 +331,23 @@ const changeBackrate = (backrate: number) => {
 const toggleWebFullscreen = () => {
   if (!isWebFullScreen.value) {
     isWebFullScreen.value = true;
-    emit('changWebFullScreen', isWebFullScreen.value);
     document.body.classList.add('webscreen-fix');
   } else {
     isWebFullScreen.value = false;
-    emit('changWebFullScreen', isWebFullScreen.value);
     document.body.classList.remove('webscreen-fix');
   }
 };
 // 显示控制条
 const showControls = (position: string) => {
-  clearTimeout(inCtrlTimer);
-  clearTimeout(inCtrlShowTimer);
+  cancelRaf(inCtrlTimer);
+  cancelRaf(inCtrlShowTimer);
   if (position === 'video') {
     controlsVisibility.value = true;
     controlsShowVisibility.value = true;
     isShowCursor.value = true;
-    inCtrlTimer = setTimeout(() => {
+    inCtrlTimer = rafTimeout(() => {
       controlsVisibility.value = false;
-      inCtrlShowTimer = setTimeout(() => {
+      inCtrlShowTimer = rafTimeout(() => {
         controlsShowVisibility.value = false;
         isShowCursor.value = false;
       }, 150);
@@ -361,10 +360,10 @@ const showControls = (position: string) => {
 };
 // 隐藏控制条
 const hideControls = () => {
-  clearTimeout(inCtrlTimer);
-  clearTimeout(inCtrlShowTimer);
+  cancelRaf(inCtrlTimer);
+  cancelRaf(inCtrlShowTimer);
   controlsVisibility.value = false;
-  inCtrlTimer = setTimeout(() => {
+  inCtrlTimer = rafTimeout(() => {
     controlsShowVisibility.value = false;
     isShowCursor.value = true;
   }, 150);
@@ -444,7 +443,6 @@ const handleFullscreenChange = () => {
   isFullscreen.value = document.fullscreenElement !== null;
   if (isWebFullScreen.value) {
     isWebFullScreen.value = false;
-    emit('changWebFullScreen', false);
     document.body.classList.remove('webscreen-fix');
   }
   showControls('video');
@@ -493,18 +491,18 @@ const handleKeyboard = (event: KeyboardEvent) => {
       break;
     case 'ArrowUp': // ↑键 音量+10
       event.preventDefault();
-      clearTimeout(volumeHintTimer);
+      cancelRaf(volumeHintTimer);
       volumeHint.value = true;
-      volumeHintTimer = setTimeout(() => {
+      volumeHintTimer = rafTimeout(() => {
         volumeHint.value = false;
       }, 3000);
       updateVolume(volume.value + 0.1);
       break;
     case 'ArrowDown': // ↓键 音量-10
       event.preventDefault();
-      clearTimeout(volumeHintTimer);
+      cancelRaf(volumeHintTimer);
       volumeHint.value = true;
-      volumeHintTimer = setTimeout(() => {
+      volumeHintTimer = rafTimeout(() => {
         volumeHint.value = false;
       }, 3000);
       updateVolume(volume.value - 0.1);
@@ -515,9 +513,9 @@ const handleKeyboard = (event: KeyboardEvent) => {
 };
 const handleVolumeChangeWithWheel = (event: WheelEvent) => {
   if (isFullscreen.value || isWebFullScreen.value) {
-    clearTimeout(volumeHintTimer);
+    cancelRaf(volumeHintTimer);
     volumeHint.value = true;
-    volumeHintTimer = setTimeout(() => {
+    volumeHintTimer = rafTimeout(() => {
       volumeHint.value = false;
     }, 3000);
   }
@@ -697,6 +695,7 @@ const changUpdateCard = (type: string, index: number) => {
 }
 
 onMounted(async () => {
+  emit('loadedChange');
   isLoaded.value = true;
   if (props.isUpload) {
     isLoading.value = false;

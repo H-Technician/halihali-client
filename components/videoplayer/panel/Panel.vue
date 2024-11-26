@@ -15,7 +15,8 @@
     </div>
 </template>
 <script setup lang="ts">
-let inTimer: ReturnType<typeof setTimeout>;  // 节流计时器
+import { rafTimeout, cancelRaf } from '@/utils/rafTimeout';
+let inTimer: ReturnType<typeof rafTimeout>;  // 节流计时器
 // 气泡框的显隐
 const panelDisplay = ref<boolean>(false);
 const isPanelShow = ref(false);
@@ -32,17 +33,17 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const show = () => {
-    clearTimeout(inTimer);
-    inTimer = setTimeout(() => {
+    cancelRaf(inTimer);
+    inTimer = rafTimeout(() => {
         panelDisplay.value = true;
         isPanelShow.value = true;
         emit('isShowPanel', true);
     }, 100);
 }
 const hide = () => {
-    clearTimeout(inTimer);
+    cancelRaf(inTimer);
     isPanelShow.value = false;
-    inTimer = setTimeout(() => {
+    inTimer = rafTimeout(() => {
         panelDisplay.value = false;
         emit('isShowPanel', false);
     }, 100);
@@ -72,12 +73,12 @@ watch(() => props.isPanelShow, (val) => {
             transform: translateZ(2px);
         }
         .panelHide {
-            animation: fade-out 0.6s ease-out forwards;
+            animation: fade-out 0.5s ease-out forwards;
             transform-origin: bottom;
         }
 
         .panelShow {
-            animation: fade-in 0.6s ease-out forwards;
+            animation: fade-in 0.5s ease-out forwards;
             transform-origin: bottom;
         }
     }

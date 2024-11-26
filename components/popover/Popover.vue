@@ -1,14 +1,13 @@
 <template>
-    <div @mouseleave="handleMouseLeave" class="popover_wrap">
-        <div @mouseenter="handleMouseEnter"  class="popover-area" @click="handleClick" ref="PopRef">
+    <div @mouseleave="handleMouseLeave" class="v-popover_wrap">
+        <div @mouseenter="handleMouseEnter"  class="v-popover-area" @click="handleClick" ref="PopRef">
             <slot name="reference"></slot>
         </div>
-        <div class="popover-area-box" :class="'to-' + placement" :style="props.popStyle">
+        <div class="v-popover-area-box" :class="'to-' + placement" :style="[props.popStyle, popoverDisplay ? 'display: block;' : 'display: none;']">
             <div
-                class="popover-area-content"
+                class="v-popover-area-content"
                 ref="PopCon"
                 :class="isPopoverShow ? 'popShow-' + placement : 'popHide-' + placement"
-                :style="popoverDisplay ? 'display: block;' : 'display: none;'"
             >
                 <slot name="content"></slot>
             </div>
@@ -16,7 +15,8 @@
     </div>
 </template>
 <script setup lang="ts">
-let inTimer: ReturnType<typeof setTimeout>;  // 节流计时器
+import { rafTimeout, cancelRaf } from '@/utils/rafTimeout';
+let inTimer: ReturnType<typeof rafTimeout>;  // 节流计时器
 // 气泡框的显隐
 const popoverDisplay = ref<boolean>(false);
 const isPopoverShow = ref(false);
@@ -53,14 +53,14 @@ const hide = () => {
 
 const handleMouseEnter = () => {
     if (props.trigger === "hover") {
-        inTimer = setTimeout(() => {
+        inTimer = rafTimeout(() => {
             show();
         }, 100);
     }
 }
 const handleMouseLeave = () => {
     if (props.trigger === "hover") {
-        clearTimeout(inTimer);
+        cancelRaf(inTimer);
         hide();
     }
 }
@@ -102,19 +102,19 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-.popover_wrap {
+.v-popover_wrap {
     position: relative;
-    .popover-area {
+    .v-popover-area {
         position: relative;
     }
 }
-.popover-area-box {
+.v-popover-area-box {
     position: absolute;
     transition: .3s;
     z-index: 100;
 }
 
-.popover-area-content {
+.v-popover-area-content {
     background-color: #ffffff;
     border-radius: 10px;
     transform: translateZ(2px);
@@ -122,6 +122,8 @@ onBeforeUnmount(() => {
         0 6px 16px 0 rgba(0, 0, 0, 0.08),
         0 3px 6px -4px rgba(0, 0, 0, 0.12),
         0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    transition: all .6s ease-in-out;
+    overflow: hidden;
 }
 
 .to-bottom {
@@ -153,12 +155,12 @@ onBeforeUnmount(() => {
 }
 
 .popHide-bottom {
-    animation: fade-out-bottom 0.2s ease-out forwards;
+    animation: fade-out-bottom 0.2s ease forwards;
     transform-origin: top; /* 设置动画的旋转点为顶部 */
 }
 
 .popShow-bottom {
-    animation: fade-in-bottom 0.6s ease-out forwards;
+    animation: fade-in-bottom 0.6s ease-in-out forwards;
     transform-origin: top;
 }
 
@@ -166,7 +168,7 @@ onBeforeUnmount(() => {
 @keyframes fade-in-bottom {
     0% {
         opacity: 0; /* 初始状态透明 */
-        transform: translateY(-1px); /* 向上平移 1px，将元素隐藏在顶部 */
+        transform: translateY(-4px); /* 向上平移 1px，将元素隐藏在顶部 */
     }
     100% {
         opacity: 1; /* 最终状态不透明 */
@@ -182,7 +184,7 @@ onBeforeUnmount(() => {
     }
     100% {
         opacity: 0; /* 最终状态透明 */
-        transform: translateY(-1px); /* 向上平移 1px，将元素隐藏在顶部 */
+        transform: translateY(-4px); /* 向上平移 1px，将元素隐藏在顶部 */
     }
 }
 

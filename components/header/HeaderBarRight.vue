@@ -1,39 +1,32 @@
 <template>
     <!-- 登录弹窗 -->
-    <DialogLoginDiaLog :showDialog="dialogVisible" width="820" height="440" @isShowDialog="isShowLoginDialog">
+    <DiaLog :duration="600" :showDialog="dialogVisible" width="820" height="440" @isShowDialog="isShowLoginDialog">
         <template #content>
             <LoginreisterLoginReister @closeLoginDialog="closeLoginDialog" />
         </template>
-    </DialogLoginDiaLog>
+    </DiaLog>
     <div class="right-entry" :class="[props.isFixedHeaderRight ? 'right-entry-fixed' : '']">
         <!-- 头像 -->
         <div class="header-avater" v-if="isLogin">
-            <PopoverAvatarPopover popStyle="padding-top: 14px; margin-left: -15px;"
-                @isShowPopover="isShowAvatarPopover">
+            <Popover popStyle="padding-top: 14px; margin-left: -15px;" @isShowPopover="isShowAvatarPopover">
                 <template #reference>
                     <!-- 登录后显示头像 -->
                     <div class="header-avatar-wrap">
-                        <a href="https://www.hblog.top" target="_blank"
-                            class="header-avatar-wrap--container"
+                        <a href="https://www.hblog.top" target="_blank" class="header-avatar-wrap--container"
                             :class="showAvatarPopover ? 'big-avatar--small' : 'mini-avatar--small'">
-                            <picture class="v-img" :style="userInfo ? '' : 'display: none;'">
-                                <source
-                                    srcset="//io.v.hblog.top/hfs/face/706353e46fe1c390d6d2cb72a704818a.jpg@240w_240h_1c_1s_!web-avatar-nav.webp"
-                                    type="image/webp">
-                                <source
-                                    srcset="//io.v.hblog.top/hfs/face/706353e46fe1c390d6d2cb72a704818a.jpg@240w_240h_1c_1s_!web-avatar-nav.jpg"
-                                    type="image/jpg">
-                                <img class="avatar-img"
-                                    src="//io.v.hblog.top/hfs/face/706353e46fe1c390d6d2cb72a704818a.jpg@240w_240h_1c_1s_!web-avatar-nav.webp"
-                                    :alt="userInfo?.uid + '头像'" v-if="isloadImg" />
+                            <picture class="v-img">
+                                <source :srcset="userInfo?.avatar?.avatar_225?.webp_url" type="image/webp">
+                                <source :srcset="userInfo?.avatar?.avatar_225?.jpg_url" type="image/jpg">
+                                <img class="avatar-img" :src="userInfo?.avatar?.avatar_225?.webp_url"
+                                    :alt="userInfo?.uid + '头像'" />
                             </picture>
                         </a>
                     </div>
                 </template>
                 <template #content>
-                    <HeadercardAvatar @islogout="isLogout" :userInfo="userInfo ? userInfo : null" />
+                    <HeadercardAvatarPopover @islogout="isLogout" :userInfo="userInfo ? userInfo : null" />
                 </template>
-            </PopoverAvatarPopover>
+            </Popover>
         </div>
         <div class="header-avater" v-else>
             <Popover popStyle="padding-top: 14px;" :isShowPopover="isShowPopover"
@@ -64,7 +57,7 @@
                         </a>
                     </template>
                     <template #content>
-                        <span>测试</span>
+                        <HeadercardVipPopover />
                     </template>
                 </Popover>
             </div>
@@ -72,12 +65,19 @@
         <!-- 消息 -->
         <div class="right-entry-item">
             <div class="right-entry-item-message" v-if="isLogin">
-                <!-- 未读信息数量 -->
-                <div class="red-num-message">12</div>
-                <a href="/test" target="_blank" class="right-entry--outside">
-                    <IconsHeaderbarXioaXi />
-                    <span>消息</span>
-                </a>
+                <Popover :popStyle="popoverStyle">
+                    <template #reference>
+                        <!-- 未读信息数量 -->
+                        <div class="red-num-message">12</div>
+                        <a href="/test" target="_blank" class="right-entry--outside">
+                            <IconsHeaderbarXioaXi />
+                            <span>消息</span>
+                        </a>
+                    </template>
+                    <template #content>
+                        <HeadercardMessagePopover />
+                    </template>
+                </Popover>
             </div>
             <div class="right-entry-item-message" v-else>
                 <Popover :popStyle="popoverStyle">
@@ -96,12 +96,19 @@
         <!-- 动态 -->
         <div class="right-entry-item">
             <div class="right-entry-item-dynamic" v-if="isLogin">
-                <!-- 未读信息数量 -->
-                <div class="red-num-message">12</div>
-                <a href="/test" target="_blank" class="right-entry--outside">
-                    <IconsHeaderbarDongTai />
-                    <span>动态</span>
-                </a>
+                <Popover :popStyle="dynPopStyle">
+                    <template #reference>
+                        <!-- 未读信息数量 -->
+                        <div class="red-num-message">12</div>
+                        <a href="/test" target="_blank" class="right-entry--outside">
+                            <IconsHeaderbarDongTai />
+                            <span>动态</span>
+                        </a>
+                    </template>
+                    <template #content>
+                        <HeadercardDynamicPopover />
+                    </template>
+                </Popover>
             </div>
             <div class="right-entry-item-dynamic" v-else>
                 <Popover :popStyle="popoverStyle">
@@ -120,10 +127,17 @@
         <!-- 收藏 -->
         <div class="right-entry-item">
             <div class="right-entry-item-collection" v-if="isLogin">
-                <a href="/test" target="_blank" class="right-entry--outside">
-                    <IconsHeaderbarShiouCang />
-                    <span>收藏</span>
-                </a>
+                <Popover :popStyle="collePopStyle">
+                    <template #reference>
+                        <a href="/test" target="_blank" class="right-entry--outside">
+                            <IconsHeaderbarShiouCang />
+                            <span>收藏</span>
+                        </a>
+                    </template>
+                    <template #content>
+                        <HeadercardFavoritePopover />
+                    </template>
+                </Popover>
             </div>
             <div class="right-entry-item-collection" v-else>
                 <Popover :popStyle="popoverStyle">
@@ -142,10 +156,17 @@
         <!-- 历史 -->
         <div class="right-entry-item">
             <div class="right-entry-item-history" v-if="isLogin">
-                <a href="/test" target="_blank" class="right-entry--outside">
-                    <IconsHeaderbarLiSHi />
-                    <span>历史</span>
-                </a>
+                <Popover :popStyle="collePopStyle">
+                    <template #reference>
+                        <a href="/test" target="_blank" class="right-entry--outside">
+                            <IconsHeaderbarLiSHi />
+                            <span>历史</span>
+                        </a>
+                    </template>
+                    <template #content>
+                        <HeadercardHistoryPopover />
+                    </template>
+                </Popover>
             </div>
             <div class="right-entry-item-history" v-else>
                 <Popover :popStyle="popoverStyle">
@@ -210,13 +231,16 @@
 <script lang="ts" setup>
 import type { UserInfo } from '@/types/user'
 import { getUserInfoApi } from '@/api/user';
+import DiaLog from '../dialog/DiaLog.vue';
 const dialogVisible = ref(false);
 const showAvatarPopover = ref(false);
 // const isLogin = useIsLogin();
 const isLogin = ref<boolean>(false);
 const screenWidth = ref<number>(0); //屏幕宽度
 const uploadoffsetStyle = ref<string>("");
+const collePopStyle = ref<string>("");
 const popoverStyle = ref<string>("");
+const dynPopStyle = ref<string>("");
 const userInfo = ref<UserInfo>();
 const isShowPopover = ref(false);
 const isloadImg = ref(false); // 是否加载头像图片
@@ -274,15 +298,18 @@ const getUserInfo = async () => {
     const response = await getUserInfoApi(); // 获取用户信息
     if (response.code === 200) {
         userInfo.value = response.data as UserInfo;
-        const avatarUrl = userInfo.value.avatar;
-        await loadImage("https://static.v.hblog.top" + avatarUrl, () => {
-            isloadImg.value = true;
-            isLogin.value = true;
-        }, (error) => {
-            console.error('图片加载失败:', error.message);
-        });
+        isLogin.value = true;
+        emit("lazyload");
+        // const avatarUrl = userInfo.value.avatar;
+        // await loadImage("https://static.v.hblog.top" + avatarUrl, () => {
+        //     isloadImg.value = true;
+        //     isLogin.value = true;
+        // }, (error) => {
+        //     console.error('图片加载失败:', error.message);
+        // });
     } else if (response.code === 401) {
         isLogin.value = false;
+        emit("lazyload");
     } else {
         throw new Error('获取用户信息失败');
     }
@@ -291,10 +318,14 @@ watchEffect(() => {
     if (screenWidth.value < 1279.9) {
         uploadoffsetStyle.value = "padding-top: 20px; margin-left: -144px";
         popoverStyle.value = "padding-top: 26px;";
+        dynPopStyle.value = "padding-top: 26px; transform: translate3d(-54%, 0, 0);";
+        collePopStyle.value = "padding-top: 26px; transform: translate3d(-74%, 0, 0);"
         // console.log(uploadoffsetStyle.value)
     } else {
         uploadoffsetStyle.value = "padding-top: 20px; margin-left: -114px";
         popoverStyle.value = "padding-top: 18px;";
+        dynPopStyle.value = "padding-top: 18px;";
+        collePopStyle.value = "padding-top: 18px; transform: translate3d(-55%, 0, 0);"
         // console.log(uploadoffsetStyle.value)
     }
 });
@@ -305,7 +336,6 @@ onMounted(async () => {
     // 初始化屏幕宽度
     updateScreenWidth();
     await getUserInfo(); // 获取用户信息
-    emit("lazyload");
 });
 onBeforeUnmount(() => {
     // 移除窗口大小变化监听
@@ -386,7 +416,7 @@ onBeforeUnmount(() => {
                 display: block;
                 width: 38px;
                 height: 38px;
-                transition: width 0.3s ease-in, height 0.3s ease-in, top 0.3s ease-out, left 0.3s ease-in;
+                transition: width 0.2s ease-in, height 0.2s ease-in, top 0.2s ease-out, left 0.2s ease-in;
             }
 
             .big-avatar--small {
@@ -394,6 +424,7 @@ onBeforeUnmount(() => {
                 left: -35px;
                 width: 90px;
                 height: 90px;
+                z-index: 101;
                 transition: width 0.3s ease-in, height 0.3s ease-in, top 0.3s ease-out, left 0.3s ease-in;
             }
 
@@ -420,6 +451,11 @@ onBeforeUnmount(() => {
                     display: block;
                 }
             }
+        }
+
+        :deep(.v-popover-area-box.to-bottom) {
+            z-index: 1;
+            animation: fade-out-bottom 0.6s ease forwards;
         }
     }
 

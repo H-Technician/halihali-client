@@ -2,18 +2,11 @@
   <div class="hl-layout">
       <HeaderBar 
       :isFixedHeader="true" 
-      :isShadow="true"
-      :isDisplayHeader="props.isDisplayHeader" />
+      :isShadow="true"/>
     <slot />
   </div>
 </template>
 <script setup lang="ts">
-interface Props {
-    isDisplayHeader?: boolean // 是否显示头部
-}
-const props = withDefaults(defineProps<Props>(), {
-    isDisplayHeader: true
-});
 </script>
 <style scoped>
 .hl-layout {

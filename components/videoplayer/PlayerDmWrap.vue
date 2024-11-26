@@ -4,11 +4,12 @@
     </div>
 </template>
 <script setup lang="ts">
+import { rafTimeout, cancelRaf } from '@/utils/rafTimeout';
 import type { Danmaku } from '@/types/danmaku';
 import danmuList from '@/assets/json/danmaku.json';
 const playerDmWrapRef = ref<HTMLDivElement | null>(null); // 弹幕容器
 let lastTimePoint = -1; // 上一个时间点
-let timeoutId: ReturnType<typeof setTimeout>; // 定时器id
+let timeoutId: ReturnType<typeof rafTimeout>; // 定时器id
 const dmList = ref<Danmaku[]>(danmuList);
 const rollRow = new Array(12).fill(-1); // 滚动弹幕轨道
 const topRow = new Array(12).fill(-1); // 顶部弹幕轨道
@@ -155,7 +156,7 @@ const handleMouseOver = (event: MouseEvent) => {
   const danmaku = event.target as HTMLElement;
   if (danmaku.classList.contains('hl_dm')) {
     danmaku.classList.add('paused');
-    timeoutId = setTimeout(() => {
+    timeoutId = rafTimeout(() => {
       danmaku.classList.remove('paused');
     }, 3000);
   }
@@ -164,7 +165,7 @@ const handleMouseOver = (event: MouseEvent) => {
 const handleMouseOut = (event: MouseEvent) => {
   const danmaku = event.target as HTMLElement;
   if (danmaku.classList.contains('hl_dm')) {
-    clearTimeout(timeoutId);
+    cancelRaf(timeoutId);
     danmaku.classList.remove('paused');
   }
 };

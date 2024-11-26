@@ -371,7 +371,8 @@ defineExpose({
 }
 
 .channel-items__left .channel-popover {
-    padding: 10px 15px;
+    box-sizing: content-box;
+    padding: 10px 10px;
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(4, 1fr);
@@ -381,13 +382,14 @@ defineExpose({
 }
 
 .channel-items__left .channel-popover .channel-popover-item {
-    height: 18px;
-    line-height: 18px;
+    height: 16px;
+    line-height: 16px;
     width: auto;
     color: var(--text2);
     padding: 4px 8px;
     text-decoration: none;
     cursor: pointer;
+    box-sizing: content-box;
 
     &:hover {
         border-radius: 4px;
@@ -398,7 +400,7 @@ defineExpose({
 .channel-items__left .channel-popover .channel-popover-item span {
     display: inline-block;
     white-space: nowrap;
-    line-height: 18px;
+    line-height: 16px;
     font-size: 12px;
 }
 

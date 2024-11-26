@@ -134,10 +134,10 @@ onBeforeUnmount(() => {
         .drop-main {
             width: auto;
             height: auto;
-            overflow-x: hidden;
-            overflow-y: auto;
+            overflow: hidden;
 
             .drop-main-item {
+                box-sizing: content-box;
                 padding: 10px 16px;
                 width: 50px;
                 cursor: pointer;

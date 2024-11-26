@@ -9,7 +9,7 @@
             :class="isActive ? 'state-active' : ''">
                 <div class="player-progress-move-indicator" 
                 :class="isActive ? 'is_active' : ''"
-                :style="`left: calc(${distanceToLeft}px - 7px)`"
+                :style="`transform: translateX(${distanceToLeft - 7}px) translateY(-1px);`"
                 v-if="!props.isUpload">
                     <div class="player-progress-move-indicator-down">
                         <IconsCaretBottom class="icon-caretbottom"/>
@@ -18,12 +18,13 @@
                         <IconsCaretBottom class="icon-carettop"/>
                     </div>
                 </div>
-                <div class="player-progress-schedule-wrap">
+                <div class="player-progress-schedule-wrap" ref="scheduleRef">
                     <div class="player-progress-schedule">
                         <div class="player-progress-schedule-buffer player-progress-schedule-centent" :style="`transform: scaleX(${props.bufferPer});`"></div>
                         <div class="player-progress-schedule-current player-progress-schedule-centent" :style="`transform: scaleX(${currentPer});`"></div>
                     </div>
-                    <div class="player-progress-schedule-dot" :style="`left: calc(${currentPerDot}% - 8px)`" v-show="isShowDot" :class="isActive ? 'show' : 'hide'">
+                    <!-- :style="`left: calc(${currentPerDot}% - 8px);`" -->
+                    <div class="player-progress-schedule-dot" :style="`transform: translateX(${scheduleRef?.clientWidth ? currentPerDot * scheduleRef?.clientWidth - 7 : 0}px);`" v-show="isShowDot" :class="isActive ? 'show' : 'hide'">
                         <IconsPlayProgressDot class="icon" />
                     </div>
                 </div>
@@ -32,12 +33,14 @@
     </div>
 </template>
 <script setup lang="ts">
+import { rafTimeout, cancelRaf } from '@/utils/rafTimeout';
 const progress = ref<HTMLDivElement | null>(null);
+const scheduleRef = ref<HTMLDivElement | null>(null);
 const isActive = ref(false);
 const isDragging = ref(false);
 const currentPer = ref(0.00001);
-let inTimer: ReturnType<typeof setTimeout>; // 节流计时器
-let outTimer: ReturnType<typeof setTimeout>;
+let inTimer: ReturnType<typeof rafTimeout>; // 节流计时器
+let outTimer: ReturnType<typeof rafTimeout>;
 const currentPerDot = ref(0);
 const isShowDot = ref(false);
 const distanceToLeft = ref(0);
@@ -60,19 +63,19 @@ const handleMouseEnter = ()  =>{
     if (progress.value) {
         progressWidth.value = progress.value.clientWidth;
     }
-    clearTimeout(outTimer);
+    cancelRaf(outTimer);
     isActive.value = true;
-    inTimer = setTimeout(() => {
+    inTimer = rafTimeout(() => {
         isShowDot.value = true;
     }, 200);
 }
 const handleMouseLeave = () => {
-    clearTimeout(inTimer);    // 清除显示计时器防止快速经过时的闪烁
+    cancelRaf(inTimer);    // 清除显示计时器防止快速经过时的闪烁
     if (!isDragging.value) {
-        outTimer = setTimeout(() => {
+        outTimer = rafTimeout(() => {
             isActive.value = false;
         }, 50);   
-        outTimer = setTimeout(() => {
+        outTimer = rafTimeout(() => {
             isShowDot.value = false;
         }, 200);             
     }            
@@ -92,7 +95,7 @@ const handleMouseDown = (e: MouseEvent) => {
     const offsetX = e.clientX - progress.value.getBoundingClientRect().left;
     const currPer = offsetX / progress.value.getBoundingClientRect().width;
     currentPer.value = currPer;
-    currentPerDot.value = currPer * 100;
+    currentPerDot.value = currPer;
     emit("changeCurrent", currPer);
     addMouseMoveListeners();
 };
@@ -105,7 +108,7 @@ const handleTouchStart = (e: TouchEvent) => {
     const offsetX = e.touches[0].clientX - progress.value.getBoundingClientRect().left;
     const currPer = offsetX / progress.value.getBoundingClientRect().width;
     currentPer.value = currPer;
-    currentPerDot.value = currPer * 100;
+    currentPerDot.value = currPer;
     emit("changeCurrent", currPer);
     addMouseMoveListeners();
 };
@@ -126,7 +129,7 @@ const handleMouseMove = (e: MouseEvent) => {
     const offsetX = e.clientX - progress.value.getBoundingClientRect().left;
     let currPer = Math.min(Math.max(0.00001, offsetX / progress.value.getBoundingClientRect().width), 0.99999);
     currentPer.value = currPer;
-    currentPerDot.value = currPer * 100;
+    currentPerDot.value = currPer;
     emit("changeCurrent", currPer);
 };
 
@@ -137,7 +140,7 @@ const handleTouchMove = (e: TouchEvent) => {
     e.preventDefault();
     const offsetX = e.touches[0].clientX - progress.value.getBoundingClientRect().left;
     let currPer = Math.min(Math.max(0.00001, offsetX / progress.value.getBoundingClientRect().width), 0.99999);
-    currentPerDot.value = currPer * 100;
+    currentPerDot.value = currPer;
     currentPer.value = currPer;
     emit("changeCurrent", currPer);
 };
@@ -166,17 +169,18 @@ const removeMouseMoveListeners = () => {
 
 // 监听 activing 的变化
 watch(() => props.activing, (newValue) => {
-    clearTimeout(outTimer); // 清除计时器
+    cancelRaf(outTimer); // 清除计时器
     isDragging.value = newValue;
     isActive.value = newValue;
 });
 
 // 监听 currentPer 的变化
 watch(() => props.currentPer, (newValue) => {
-    clearTimeout(outTimer); // 清除计时器
+    cancelRaf(outTimer); // 清除计时器
     currentPer.value = newValue;
-    currentPerDot.value = newValue * 100;
+    currentPerDot.value = newValue;
 });
+
 onMounted(() =>{
     if (progress.value) {
         progress.value.addEventListener("mousedown", handleMouseDown);
@@ -224,6 +228,7 @@ onUnmounted(() => {
             position: relative;
             width: 100%;
             transition: all .2s linear;
+            transform: translateY(-2px);
 
             .player-progress-schedule-wrap {
                 position: absolute;
@@ -288,8 +293,8 @@ onUnmounted(() => {
                 }
             }
             .player-progress-move-indicator {
-                position: absolute;
-                left: 40%;
+                // position: absolute;
+                // left: 40%;
                 width: 10px;
                 height: 30px;
                 color: var(--brand_blue);
@@ -325,30 +330,30 @@ onUnmounted(() => {
         }
 
         .state-active {
-            height: 6px;
+            height: 5px;
         }
     }
 }
 /* 淡入动画 */
 @keyframes dot-in {
     0% {
-        transform: scale(0, 0); /* 初始状态缩放为0 */
+        // transform: scale(0, 0); /* 初始状态缩放为0 */
         opacity: 0; /* 初始状态透明 */
     }
     100% {
-        transform: scale(1, 1); /* 缩放至原始尺寸 */
+        // transform: scale(1, 1); /* 缩放至原始尺寸 */
         opacity: 1; /* 最终状态不透明 */
     }
 }
 /* 淡出动画 */
 @keyframes dot-out {
     0% {
-        transform: scale(1, 1); /* 缩放至原始尺寸 */
-        transform: translateY(1px);
+        // transform: scale(1, 1); /* 缩放至原始尺寸 */
+        // transform: translateY(1px);
         opacity: 1; /* 初始状态不透明 */   
     }
     100% {
-        transform: scale(0, 0); /* 初始状态缩放为0 */
+        // transform: scale(0, 0); /* 初始状态缩放为0 */
         opacity: 0; /* 最终状态透明 */
     }
 }

@@ -1,40 +1,29 @@
 <template>
-    <div class="header-bar" 
-    :class="[props.isFixedHeader ? 'header-bar-slide-down' : '', 
-    props.isDisplayHeader ? '' : 'hide-header-bar', 
+    <div class="header-bar" :class="[props.isFixedHeader ? 'header-bar-slide-down' : '',
     LazyloadingModule && props.isindex ? 'header-bar-index-lazyloading' : '',
-    LazyloadingModule && !props.isindex ? 'header-bar-lazyloading' : '']" 
-    :style="props.isShadow 
-    ? 'box-shadow: 0 0 30px rgba(0,0,0,.1);' : ''">
-        <HeaderBarLeft 
-        :isFixedHeaderLeft="props.isFixedHeader" 
-        :isShowCenter="props.isShowCenter"/>
-        <HeaderBarCenter 
-        :isFixedHeaderCenter="props.isFixedHeader" 
-        :style="props.isShowCenter ? '' 
-        : ' display: none;'" />
-        <HeaderBarRight 
-        :isFixedHeaderRight="props.isFixedHeader" 
-        @lazyload="lazyload"/>
-        
+    LazyloadingModule && !props.isindex ? 'header-bar-lazyloading' : '']" :style="props.isShadow
+        ? 'box-shadow: 0 0 30px rgba(0,0,0,.1);' : ''">
+        <HeaderBarLeft :isFixedHeaderLeft="props.isFixedHeader" :isShowCenter="props.isShowCenter" />
+        <HeaderBarCenter :isFixedHeaderCenter="props.isFixedHeader" :style="props.isShowCenter ? ''
+            : ' display: none;'" />
+        <HeaderBarRight :isFixedHeaderRight="props.isFixedHeader" @lazyload="lazyload" />
+
     </div>
 </template>
 
 <script lang="ts" setup>
 const LazyloadingModule = ref<boolean>(true);// 用户信息模块延迟加载
-interface Props{
+interface Props {
     isindex?: boolean // 是否是首页
     isFixedHeader?: boolean // 是否固定头部
     isShadow?: boolean // 是否显示阴影
     isShowCenter?: boolean // 是否显示中间内容
-    isDisplayHeader?: boolean // 是否显示头部
 }
 const props = withDefaults(defineProps<Props>(), {
     isindex: false,
     isFixedHeader: false,
     isShadow: false,
     isShowCenter: true,
-    isDisplayHeader: true,
 });
 const lazyload = () => {
     LazyloadingModule.value = false;
@@ -42,7 +31,8 @@ const lazyload = () => {
 </script>
 <style scoped lang="scss">
 .header-bar {
-    box-sizing: border-box; /* 让内边距不增加宽度 */
+    box-sizing: border-box;
+    /* 让内边距不增加宽度 */
     position: absolute;
     margin: 0;
     padding: 0 24px;
@@ -61,13 +51,9 @@ const lazyload = () => {
     position: fixed;
     top: 0;
     // animation: headerSlideDown .3s linear forwards;
-    border-bottom: 1px solid rgba(0,0,0,.1);
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
     background-color: #ffffff;
     // z-index: 3;
-}
-
-.hide-header-bar {
-    visibility: hidden;
 }
 
 .header-bar-index-lazyloading {
@@ -76,9 +62,16 @@ const lazyload = () => {
     :deep(.right-entry) {
         display: none;
     }
-    
+
     :deep(.center-search-container) {
-        max-width: 32%;
+        max-width: 26%;
+        margin-left: calc(100%/12);
+    }
+
+    @media (max-width: 1701px) {
+        :deep(.center-search-container) {
+            margin-left: 0;
+        }
     }
 }
 
@@ -88,8 +81,9 @@ const lazyload = () => {
         .header-avater {
             display: none;
         }
-        
+
         .right-entry-item {
+
             .right-entry-item-vip,
             .right-entry-item-message,
             .right-entry-item-dynamic,
@@ -98,10 +92,10 @@ const lazyload = () => {
             .right-entry-item-creation {
                 display: none;
             }
-        } 
-        
+        }
+
     }
-    
+
     :deep(.center-search-container) {
         display: none;
     }
@@ -128,6 +122,4 @@ const lazyload = () => {
         }
     }
 }
-
 </style>
-  

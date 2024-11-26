@@ -86,6 +86,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="msg-item is-me">
+                                <a href="//space.bilibili.com/651386960" title="浅影阿_" target="_blank" class="avatar"
+                                    style="background-image: url(https://io.v.hblog.top/hfs/face/706353e46fe1c390d6d2cb72a704818a.jpg@240w_240h_1c_1s_!web-avatar-nav.webp);"></a>
+                                <div class="message img-padding">
+                                    <div data-key="7440031281225790779" class="message-content is-me is-img">
+                                        <img class="im-msg-item-img" title="[图片] 点击查看大图" alt="[图片] 点击查看大图"
+                                            src="https://io.v.hblog.top/hfs/img_new/eecb1542b473707654dbd70e0d10419a1218132566.png@437w_150h_1c.webp"
+                                            style="width:437px; height:150px; background:#fff;">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="new-message-tip" style="display: none;">

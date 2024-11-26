@@ -2,23 +2,39 @@ import { createVNode, render } from 'vue';
 import type { VNode } from 'vue';
 import type { InteractionCard } from '@/types/interaction';
 
-// 定义挂载和卸载动态组件的函数
-class Player {
+// 定义 Player 类
+export class Player {
   private vPlayernode: VNode | null = null;
   private playerWrap: HTMLElement | null = null;
   private unmountListener: (() => void) | null = null;
 
-  public async mountPlayer(playerWrapElement: string, dashUrl: string, interactionCard: InteractionCard, danmakuElement: string, onChangWebFullScreen: (value: boolean) => void, onToggleWideScreen: (value: boolean) => void) {
-    this.playerWrap = document.querySelector(playerWrapElement);
+  constructor(
+    private playerWrapElement: string,
+    private dashUrl: string,
+    private interactionCard?: InteractionCard,
+    private danmakuElement?: string,
+    private onToggleWideScreen?: (value: boolean) => void,
+    private onLoadedChange?: (value: boolean) => void
+  ) {}
+
+  public async mountPlayer() {
+    this.playerWrap = document.querySelector(this.playerWrapElement);
     if (!this.playerWrap) {
-      console.error(`Element with id ${playerWrapElement} not found`);
+      console.error(`Element with id ${this.playerWrapElement} not found`);
       return;
     }
 
     try {
       const player = await import('@/components/videoplayer/Player.vue');
       if (player) {
-        this.vPlayernode = createVNode(player.default, { videoUrl: dashUrl, protocol: 'dash', interactionCard, danmakuElement, onChangWebFullScreen, onToggleWideScreen });
+        this.vPlayernode = createVNode(player.default, {
+          videoUrl: this.dashUrl,
+          protocol: 'dash',
+          interactionCard: this.interactionCard,
+          danmakuElement: this.danmakuElement,
+          onToggleWideScreen: this.onToggleWideScreen,
+          onLoadedChange: this.onLoadedChange
+        });
         render(this.vPlayernode, this.playerWrap);
         // 注册页面卸载事件监听器
         this.unmountListener = () => this.unmountPlayer();
@@ -42,5 +58,3 @@ class Player {
     }
   }
 }
-
-export default new Player();

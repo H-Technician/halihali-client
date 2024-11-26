@@ -49,6 +49,8 @@ const changDisplayDanmu = (val: boolean) => {
     display: flex;
     align-items: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    
     .player-sending-bar {
         -webkit-box-flex: 0;
         -webkit-box-pack: justify;

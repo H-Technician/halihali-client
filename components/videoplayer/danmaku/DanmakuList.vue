@@ -77,7 +77,6 @@
 <script setup lang="ts">
 const isExpandList = ref<boolean>(false);
 const dmListRef = ref<HTMLElement | null>(null);
-let inTimer: ReturnType<typeof setTimeout>;  // 节流计时器
 const expandList = () => {
     isExpandList.value = !isExpandList.value;
 } 

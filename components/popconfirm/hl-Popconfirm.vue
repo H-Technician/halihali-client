@@ -2,6 +2,7 @@
 import { ref, watch, computed } from 'vue'
 import type { CSSProperties } from 'vue'
 import { useSlotsExist } from '@/utils/useSlotsExist'
+import { rafTimeout } from '@/utils/rafTimeout';
 interface Props {
   maxWidth?: string | number // 弹出确认框最大宽度，单位 px
   title?: string // 弹出确认框的标题 string | slot
@@ -91,7 +92,7 @@ function onShow() {
   hideTimer.value && clearTimeout(hideTimer.value)
   if (!visible.value) {
     // getPosition();
-    setTimeout(() => {
+    rafTimeout(() => {
       visible.value = true
       emits('update:show', true)
       emits('openChange', true)
@@ -99,7 +100,7 @@ function onShow() {
   }
 }
 function onHide(): void {
-  hideTimer.value = setTimeout(() => {
+  hideTimer.value = rafTimeout(() => {
     visible.value = false
     emits('update:show', false)
     emits('openChange', false)

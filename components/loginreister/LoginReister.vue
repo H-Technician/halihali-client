@@ -1,8 +1,8 @@
-<template> 
+<template>
     <div class="login-register-box">
         <div class="login-card">
             <div class="login-left">
-                <div class= "login-left-text">
+                <div class="login-left-text">
                     <span>扫描二维码登录</span>
                 </div>
                 <div class="qrcode-login">
@@ -12,7 +12,8 @@
                                 <img src="@/assets/img/qr-code.png" alt="">
                             </div>
                             <div class="login_qrcode_tip">
-                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAARVBMVEUAAAAAruwArusAruwAruwArewAq+sArusAresAr+sAruwAr+8Aru8AruwAruwAr+cArewAr+0AruwArewAr98ArusAruy8BWrbAAAAFnRSTlMA76DfcL9AMJBAgCAQz68gYI9fUBDPY12YwgAAAUZJREFUOMuNlFuShCAMRcNTQEBbp9n/UkcTuhnKKHN/rIqHXBII0MvrrEQpIuXg4VYxHEyTkjOPvcpFHKpFYaQ2OLQb813x+vxx626t1VLVwOvwOj6p2hoMCmebxSSJTNGeHwq+MWQW6LQQahBsvkIzGyfyA67ITcBoohIJnHHfyHFkA3EnmsV8COkLzthZPl1pqgkXFnSNUwDqNiGsDdzAPlQC2pCkBQiUd6xMzmMl7M1AMQKcDfUDLpzFlBFInRb/AKkxaL2PQYH9Xp8wumwJ2+OeMDrkDHrYcDQNYIfVTJUQI2+JnnTYYr7F2n2NOD/3YLuvrjwdt24DEAUO4UMlaqmLRuO69bOhWd++J4Z95GYKv6EppkLoH38vKWZ+2MlUUnvvd+1UDbjLaKrCiHu5FnnlHNoyqOqyBcR42ZCTOBiVtYVOvw1hKHrM5JK6AAAAAElFTkSuQmCC">
+                                <img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAARVBMVEUAAAAAruwArusAruwAruwArewAq+sArusAresAr+sAruwAr+8Aru8AruwAruwAr+cArewAr+0AruwArewAr98ArusAruy8BWrbAAAAFnRSTlMA76DfcL9AMJBAgCAQz68gYI9fUBDPY12YwgAAAUZJREFUOMuNlFuShCAMRcNTQEBbp9n/UkcTuhnKKHN/rIqHXBII0MvrrEQpIuXg4VYxHEyTkjOPvcpFHKpFYaQ2OLQb813x+vxx626t1VLVwOvwOj6p2hoMCmebxSSJTNGeHwq+MWQW6LQQahBsvkIzGyfyA67ITcBoohIJnHHfyHFkA3EnmsV8COkLzthZPl1pqgkXFnSNUwDqNiGsDdzAPlQC2pCkBQiUd6xMzmMl7M1AMQKcDfUDLpzFlBFInRb/AKkxaL2PQYH9Xp8wumwJ2+OeMDrkDHrYcDQNYIfVTJUQI2+JnnTYYr7F2n2NOD/3YLuvrjwdt24DEAUO4UMlaqmLRuO69bOhWd++J4Z95GYKv6EppkLoH38vKWZ+2MlUUnvvd+1UDbjLaKrCiHu5FnnlHNoyqOqyBcR42ZCTOBiVtYVOvw1hKHrM5JK6AAAAAElFTkSuQmCC">
                                 <span>二维码已过期</span>
                                 <span>请点击刷新</span>
                             </div>
@@ -37,44 +38,42 @@
             <div class="login-register-container">
                 <div class="login-register_header">
                     <div class="navs">
-                        <div class="navs-item" @click="switchLoginCard('password')" :class="isCardActive === 'password' ? 'active' : ''">
+                        <div class="navs-item" @click="switchLoginCard($event, 'password')"
+                            :class="isCardActive === 'password' ? 'active' : ''">
                             密码登录
                         </div>
-                        <div class="navs-item" @click="switchLoginCard('verificationCode')" :class="isCardActive === 'verificationCode' ? 'active' : ''">
+                        <div class="navs-item" @click="switchLoginCard($event, 'verificationCode')"
+                            :class="isCardActive === 'verificationCode' ? 'active' : ''">
                             验证码登录
                         </div>
                     </div>
                 </div>
                 <div class="login-register_content">
-                    <div class="login-box" v-if="isCardActive === 'password'">
-                        <form class="input-box input-box-top">
+                    <form class="login-box" v-show="isCardActive === 'password'">
+                        <div class="input-box input-box-top">
                             <span>账号</span>
                             <input type="text" placeholder="请输入账号" v-model="usernameLogin" maxlength="32">
-                        </form>
-                        <form class="input-box input-box-bottom">
+                        </div>
+                        <div class="input-box input-box-bottom">
                             <span>密码</span>
-                            <input :type="isxianshimima ? 'text' : 'password'" 
-                            placeholder="请输入密码" 
-                            v-model="passwordLogin" 
-                            maxlength="32"
-                            autocomplete="off"s 
-                            @blur="enterPassword = false" 
-                            @focus="enterPassword = true">
-                            <IconsLoginreistetZhengYan class="xianshimima" v-if="isxianshimima" @click="YincangMima"/>
-                            <IconsLoginreistetBiYan class="yincangmima" v-else @click="XianshiMima"/>
+                            <input :type="isxianshimima ? 'text' : 'password'" placeholder="请输入密码"
+                                v-model="passwordLogin" maxlength="32" autocomplete="off" s
+                                @blur="enterPassword = false" @focus="enterPassword = true">
+                            <IconsLoginreistetZhengYan class="xianshimima" v-if="isxianshimima" @click="YincangMima" />
+                            <IconsLoginreistetBiYan class="yincangmima" v-else @click="XianshiMima" />
                             <Popover popStyle="padding-top: 14px;" placement="bottom" trigger="click">
                                 <template #reference>
-                                    <button class="wjma" @click="(event) => {event.preventDefault();}">忘记密码？</button>
+                                    <button class="wjma" @click="(event) => { event.preventDefault(); }">忘记密码？</button>
                                 </template>
                                 <template #content>
                                     <div class="wjma-box" style="width: 240px;">
-                                        <div @click="switchLoginCard('verificationCode')">
+                                        <div @click="switchLoginCard($event, 'verificationCode')">
                                             <div class="wjma-text">
                                                 <span>发送验证码快捷登录</span>
                                             </div>
                                             <div class="wjma-text text-tips">
                                                 <span>未注册或绑定哈哩哈哩的手机号或邮箱，将帮你注册新账号</span>
-                                            </div> 
+                                            </div>
                                         </div>
                                         <div style="margin-top: 10px;">
                                             <div class="wjma-text">
@@ -87,25 +86,31 @@
                                     </div>
                                 </template>
                             </Popover>
-                        </form>
+                        </div>
                         <div class="submit-box">
-                            <button class="submit-register" @click="switchLoginCard('verificationCode')">注&nbsp;册</button>
+                            <button class="submit-register"
+                                @click="switchLoginCard($event, 'verificationCode')">注&nbsp;册</button>
                             <button class="submit" @click="login">登&nbsp;录</button>
                         </div>
-                    </div>
-                    <div class="register-box" v-else>
-                        <form class="input-box input-box-top">
+                    </form>
+                    <form class="register-box" v-show="isCardActive === 'verificationCode'">
+                        <div class="input-box input-box-top">
                             <!-- <span>手机号</span> -->
-                            <LoginreisterLoginTypeSelect @select="selectRegisterType"/>
-                            <input type="text" :placeholder="registerPlaceholder" :maxlength="inputMaxLength" :clearable="true" v-model="registerNumber">
-                            <button class="yzm" @click="getYzm" v-bind:disabled="isBtnDisabled" :style="isBtnDisabled ? 'cursor: not-allowed; color: #808385;' : 'color: #00aeec;'">{{ yzmTimeText }}</button>
-                        </form>
-                        <form class="input-box input-box-bottom">
+                            <LoginreisterLoginTypeSelect @select="selectRegisterType" />
+                            <input type="text" :placeholder="registerPlaceholder" :maxlength="inputMaxLength"
+                                :clearable="true" v-model="registerNumber">
+                            <button class="yzm" @click="getYzm" v-bind:disabled="isBtnDisabled"
+                                :style="isBtnDisabled ? 'cursor: not-allowed; color: #808385;' : 'color: #00aeec;'">{{
+                                    yzmTimeText
+                                }}</button>
+                        </div>
+                        <div class="input-box input-box-bottom">
                             <span>验证码</span>
-                            <input type="text" placeholder="请输入验证码" maxlength="6" v-model="verificationCode" @blur="enterPassword = false" @focus="enterPassword = true">
-                        </form>
-                        <button  class="submit" @click="register">登&nbsp;录/注&nbsp;册</button>
-                    </div>
+                            <input type="text" placeholder="请输入验证码" maxlength="6" v-model="verificationCode"
+                                @blur="enterPassword = false" @focus="enterPassword = true">
+                        </div>
+                        <button class="submit" @click="register">登&nbsp;录/注&nbsp;册</button>
+                    </form>
                 </div>
                 <div class="login-oauth">
                     <div class="divider">
@@ -135,12 +140,13 @@
                             <IconsLoginreistetHuawei class="icon" />
                             <span class="text">华为账号登录</span>
                         </a> -->
-                    </div>   
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="tips" >未注册过哈哩哈哩的手机号，我们将自动帮你注册账号</div>
-        <div class="tips" >登录代表你同意<span class="agreement">用户协议</span>&nbsp;和&nbsp;<span class="agreement">隐私政策</span></div>
+        <div class="tips">未注册过哈哩哈哩的手机号，我们将自动帮你注册账号</div>
+        <div class="tips">登录代表你同意<span class="agreement">用户协议</span>&nbsp;和&nbsp;<span class="agreement">隐私政策</span>
+        </div>
         <div class="login-register-bottom fixed-left">
             <img src="@/assets/img/loginbox/bottom_left_protect.png" alt="左边小人蒙眼">
             <img src="@/assets/img/loginbox/bottom_left.png" alt="左边小人" :class="enterPassword ? 'hide' : ''">
@@ -211,12 +217,12 @@ const registerReqData = reactive<RegisterReq>({
     verifyCode: ""
 });
 // 倒计时剩余时间
-const remainingTime = reactive ({
+const remainingTime = reactive({
     seconds: totalTime
 })
 // 计时器变量
 let timer: NodeJS.Timeout | null = null
- 
+
 // 倒计时
 const startCountingDown = () => {
     if (!countingDown.value) {
@@ -231,9 +237,9 @@ const startCountingDown = () => {
         } else {
             stopCountingDown()
         }
-    },1000)
+    }, 1000)
 }
- 
+
 // 倒计时停止
 const stopCountingDown = () => {
     if (timer) {
@@ -242,12 +248,12 @@ const stopCountingDown = () => {
         countingDown.value = false
         sessionStorage.removeItem('EndTime')  //计时完后清除sessionStorage
     }
-    
+
 }
 // 短信按钮文字切换
-const yzmTimeText = computed (() => (countingDown.value ? remainingTime.seconds +"秒后重试" : "获取验证码"));
+const yzmTimeText = computed(() => (countingDown.value ? remainingTime.seconds + "秒后重试" : "获取验证码"));
 // 获取验证码
-const getYzm = async (event: Event)  => {
+const getYzm = async (event: Event) => {
     event.preventDefault();
     // 为了减小后端压力，首先对格式进行验证
     if (registerType.value === "phone") {
@@ -286,12 +292,12 @@ const getVerificationCode = async (getCodeReqData: GetCodeReq) => {
     }
 };
 // 监听按钮是否倒数120s 实现按钮点击事件的禁用
-watchEffect (() => {  
+watchEffect(() => {
     // console.log(phoneNumber.value);
     if (countingDown.value) {
-        isBtnDisabled.value=true;
-    }else {
-        isBtnDisabled.value=false;
+        isBtnDisabled.value = true;
+    } else {
+        isBtnDisabled.value = false;
     }
 })
 
@@ -302,7 +308,8 @@ const XianshiMima = () => {
     isxianshimima.value = true;
 }
 // 登录方式切换
-const switchLoginCard = (loginType: string) => {
+const switchLoginCard = (event: MouseEvent, loginType: string) => {
+    event.preventDefault();
     if (loginType === isCardActive.value) {
         return;
     }
@@ -326,9 +333,9 @@ const loginRequest = async (captchaId: string) => {
         Message.success(response.msg);
         emit('closeLoginDialog', true);
         localStoragejwt(
-            response.data.device, 
-            response.data.loginType, 
-            response.data.hl_ticket, 
+            response.data.device,
+            response.data.loginType,
+            response.data.hl_ticket,
             response.data.hl_ticket_expires,
             response.data.uid
 
@@ -353,7 +360,8 @@ const determineInputType = (input: string): string => {
     }
 }
 // 登录
-const login = async () => {
+const login = async (event: MouseEvent) => {
+    event.preventDefault();
     if (usernameLogin.value === "") {
         Message.error("账号不能为空");
         return;
@@ -388,13 +396,14 @@ const selectRegisterType = (registerTypeId: number) => {
     }
 }
 // 注册
-const register = async () => {
+const register = async (event: MouseEvent) => {
+    event.preventDefault();
     if (registerType.value === 'phone') {
         // 手机号注册
-        if (registerNumber.value.length == 0){
+        if (registerNumber.value.length == 0) {
             Message.error("手机号不能为空");
             return;
-        } else if ( !phoneRegex.test(registerNumber.value)) {
+        } else if (!phoneRegex.test(registerNumber.value)) {
             Message.error("手机号格式不正确");
             return;
         } else if (verificationCode.value.length == 0) {
@@ -408,10 +417,10 @@ const register = async () => {
         registerReqData.phone = registerNumber.value;
     } else if (registerType.value === 'mail') {
         // 邮箱注册
-        if (registerNumber.value.length == 0){
+        if (registerNumber.value.length == 0) {
             Message.error("邮箱地址不能为空");
             return;
-        } else if ( !emailRegex.test(registerNumber.value)) {
+        } else if (!emailRegex.test(registerNumber.value)) {
             Message.error("邮箱地址格式不正确");
             return;
         } else if (verificationCode.value.length == 0) {
@@ -430,9 +439,9 @@ const register = async () => {
         Message.success(response.msg);
         emit('closeLoginDialog', true);
         localStoragejwt(
-            response.data.device, 
-            response.data.loginType, 
-            response.data.hl_ticket, 
+            response.data.device,
+            response.data.loginType,
+            response.data.hl_ticket,
             response.data.hl_ticket_expires,
             response.data.uid
 
@@ -446,12 +455,9 @@ const register = async () => {
 }
 // 第三方登录
 const authLogin = async (type: string) => {
-    const route = useRoute();
-    const data = { pageIdentifier: route.path };
-    const response = await authLoginApi(data, type);
-    if (response.code === 200) {
-        window.open(response.data, '_self');
-        //window.location.href = data.data as string;
+    const response = await authLoginApi(type);
+    if (response.code === 200 && response.data) {
+        window.location.href = response.data;
     } else {
         Message.error(response.msg);
     }
@@ -480,25 +486,25 @@ const resetCodeForm = () => {
 }
 onMounted(async () => {
     //刷新页面时重新取得计时并将计时
-    const count = Math.ceil((JSON.parse(sessionStorage.getItem('EndTime') || '0') - new Date().getTime())/1000);  //取出计时
+    const count = Math.ceil((JSON.parse(sessionStorage.getItem('EndTime') || '0') - new Date().getTime()) / 1000);  //取出计时
     // console.log(count);
     if (count > 0) {
         countingDown.value = true;
         remainingTime.seconds = count;
         timer = setInterval(() => {
-        if (remainingTime.seconds > 0) {
-            remainingTime.seconds--
+            if (remainingTime.seconds > 0) {
+                remainingTime.seconds--
             } else {
                 stopCountingDown()
             }
-        },1000)
-    }else {
+        }, 1000)
+    } else {
         sessionStorage.removeItem('EndTime'); //如果读取的时间小于0则清除sessionStorage数据
     }
 
 })
 </script>
-<style scoped lang="scss"> 
+<style scoped lang="scss">
 .login-register-box {
     position: relative;
     width: 100%;
@@ -510,6 +516,7 @@ onMounted(async () => {
     color: var(--text2);
     font-size: 12px;
     text-align: center;
+
     .agreement {
         color: var(--brand_blue);
         margin-left: 4px;
@@ -529,6 +536,7 @@ onMounted(async () => {
         position: absolute;
         bottom: 0;
     }
+
     .hide {
         visibility: hidden;
     }
@@ -546,6 +554,7 @@ onMounted(async () => {
     display: flex;
     padding: 0 32px;
 }
+
 .login-card .login-left {
     width: 280px;
 }
@@ -557,20 +566,21 @@ onMounted(async () => {
     display: flex;
     justify-content: center;
     align-items: center;
+
     span {
         font-size: 18px;
     }
 }
- 
+
 .qrcode-login {
     position: relative;
     width: 280px;
 }
- 
+
 .qrcode-login .qrcode-con {
     padding-top: 10px;
 }
- 
+
 .qrcode-login .qrcode-con .qrcode-box {
     width: 160px;
     height: 160px;
@@ -580,13 +590,14 @@ onMounted(async () => {
     padding: 6px;
     border-radius: 6px;
     border: 1px solid #e3e6e8;
+    box-sizing: content-box;
 }
- 
+
 .qrcode-img {
     width: 160px;
     height: 160px;
 }
- 
+
 .qrcode-img>img {
     width: 100%;
     height: 100%;
@@ -615,6 +626,7 @@ onMounted(async () => {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
+
     img {
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
@@ -625,6 +637,7 @@ onMounted(async () => {
         background: #fff;
         border-radius: 50%;
     }
+
     span {
         font-style: normal;
         font-weight: 500;
@@ -633,7 +646,7 @@ onMounted(async () => {
         color: #61666d;
     }
 }
- 
+
 .qrcode-tips {
     position: absolute;
     width: 330px;
@@ -650,22 +663,22 @@ onMounted(async () => {
     transition: opacity .5s;
     z-index: 2;
 }
- 
+
 .qrcode-tips:hover {
     opacity: 1.0;
 }
- 
+
 .qrcode-login .qrcode-footer {
     width: 260px;
     height: 80px;
 }
- 
+
 .app-link {
     text-align: center;
     color: #717171;
     font-size: 14px;
 }
- 
+
 .app-link>a {
     color: var(--brand_blue);
 }
@@ -677,6 +690,7 @@ onMounted(async () => {
     position: relative;
     z-index: 3;
 }
+
 .login-register-container {
     display: block;
     width: 280px;
@@ -688,22 +702,27 @@ onMounted(async () => {
         display: flex;
         display: -webkit-flex;
         justify-content: center;
+
         .navs {
             display: flex;
             justify-content: center;
+
             .navs-item {
                 display: block;
                 cursor: pointer;
                 font-size: 16px;
                 color: var(--text2);
             }
+
             :nth-child(1) {
                 padding-right: 20px;
                 border-right: .5px solid #e3e6e8;
             }
+
             :nth-child(2) {
                 padding-left: 20px;
             }
+
             .active {
                 color: var(--brand_blue);
             }
@@ -712,7 +731,8 @@ onMounted(async () => {
 }
 
 
-.login-box, .register-box {
+.login-box,
+.register-box {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -731,7 +751,8 @@ onMounted(async () => {
     justify-content: space-between;
 }
 
-.login-box .input-box, .register-box .input-box {
+.login-box .input-box,
+.register-box .input-box {
     width: 100%;
     height: 46px;
     font-size: 14px;
@@ -761,6 +782,7 @@ onMounted(async () => {
     input[type="text"] {
         letter-spacing: 0.1rem;
     }
+
     input[type="password"] {
         letter-spacing: 0.1rem;
     }
@@ -770,19 +792,24 @@ onMounted(async () => {
     }
 }
 
-.login-box .input-box-top, .register-box .input-box-top {
+.login-box .input-box-top,
+.register-box .input-box-top {
     border-radius: 10px 10px 0 0;
     border-bottom: none;
 }
-.login-box .input-box-bottom, .register-box .input-box-bottom {
+
+.login-box .input-box-bottom,
+.register-box .input-box-bottom {
     border-radius: 0 0 10px 10px;
 }
 
 .wjma-box {
     padding: 10px 20px;
+
     .wjma-text {
         margin: 0;
         cursor: pointer;
+
         span {
             margin: 0;
             font-size: 13px;
@@ -797,21 +824,24 @@ onMounted(async () => {
     }
 }
 
-.register-box .submit{
+.register-box .submit {
     margin-top: 30px;
     width: 50%;
     height: 40px;
     font-size: 14px;
 }
 
-.xianshimima, .yincangmima {
+.xianshimima,
+.yincangmima {
     height: 25px;
     width: 25px;
     cursor: pointer;
     display: inline-block;
     vertical-align: -8px;
 }
-.xianshimima:hover, .yincangmima:hover {
+
+.xianshimima:hover,
+.yincangmima:hover {
     color: var(--brand_blue);
     fill: var(--brand_blue);
 }
@@ -835,6 +865,7 @@ onMounted(async () => {
     cursor: pointer;
     text-align: center;
 }
+
 .submit {
     color: #fff;
     border: none;
@@ -874,43 +905,48 @@ onMounted(async () => {
     box-sizing: border-box;
     width: 100%;
     height: 40px;
+
     .divider {
-            width: 260px;
-            height: 16px;
-            position: relative;
-            margin: 10px auto;
-             
-        }
-        .liner {
-            width: 100%;
-            height: 1px;
-            background-color: #ccc;
-            position: relative;
-            top: 50%;
-        }
-        .divider-text {
-            text-align: center;
-            width: 90px;
-            height: 20px;
-            line-height: 20px;
-            margin:0 auto;
-            background-color: #fff;
-            position: relative;
-            color: var(--text2);
-            font-size: 12px;
-        }
+        width: 260px;
+        height: 16px;
+        position: relative;
+        margin: 10px auto;
+
+    }
+
+    .liner {
+        width: 100%;
+        height: 1px;
+        background-color: #ccc;
+        position: relative;
+        top: 50%;
+    }
+
+    .divider-text {
+        text-align: center;
+        width: 90px;
+        height: 20px;
+        line-height: 20px;
+        margin: 0 auto;
+        background-color: #fff;
+        position: relative;
+        color: var(--text2);
+        font-size: 12px;
+    }
 
     .list {
         align-items: center;
         display: flex;
         justify-content: center;
         width: 100%;
+
         .item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-left: 12px;
             margin-right: 12px;
+
             .icon {
                 height: 30px;
                 width: 30px;
@@ -928,4 +964,3 @@ onMounted(async () => {
     }
 }
 </style>
-  
